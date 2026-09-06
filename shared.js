@@ -29,9 +29,11 @@ const SSToast = {
 
 // ===== API HELPER =====
 
+const API_BASE = "https://second-stories-production.up.railway.app";
+
 async function apiJSON(url, options = {}) {
-  const response = await fetch(url, {
-    credentials: "same-origin",
+  const response = await fetch(API_BASE + url, {
+    credentials: "include",
     ...options
   });
 
@@ -43,7 +45,7 @@ async function apiJSON(url, options = {}) {
     data = JSON.parse(text);
   } catch {
     throw new Error(
-      `Server mengembalikan respons bukan JSON (${response.status}). Pastikan website dibuka dari http://localhost:3000.`
+      `Server mengembalikan respons bukan JSON (${response.status}).`
     );
   }
 
