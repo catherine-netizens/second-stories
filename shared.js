@@ -1,4 +1,4 @@
-```javascript
+
 // ===== SECOND STORIES SHARED =====
 
 const SSToast = {
