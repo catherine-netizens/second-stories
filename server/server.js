@@ -36,7 +36,10 @@ app.use(session({
 }));
 
 function ok(res, data = {}) {
-  return res.json({ success: true, ...data });
+  return res.json({
+    success: true,
+    ...data
+  });
 }
 
 function fail(res, status, message) {
@@ -64,19 +67,28 @@ async function seedDatabase() {
     "SELECT COUNT(*) AS total FROM products"
   );
 
-  if (Number(countRows[0].total) > 0) return;
+  if (Number(countRows[0].total) > 0) {
+    return;
+  }
 
   const sellers = {};
 
   const sellerNames = [
-    ...new Set(SS_PRODUCTS.map(p => p.seller.name))
+    ...new Set(
+      SS_PRODUCTS.map(p => p.seller.name)
+    )
   ];
 
-  const demoPassword = await bcrypt.hash("demo1234", 10);
+  const demoPassword = await bcrypt.hash(
+    "demo1234",
+    10
+  );
 
   for (const name of sellerNames) {
     const email =
-      name.toLowerCase().replace(/[^a-z0-9]+/g, ".") +
+      name
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, ".") +
       "@demo.secondstories.local";
 
     const avatar =
@@ -115,30 +127,31 @@ async function seedDatabase() {
   }
 
   for (const p of SS_PRODUCTS) {
-    const sellerId = sellers[p.seller.name];
+    const sellerId =
+      sellers[p.seller.name];
 
     await pool.query(
       `INSERT INTO products
-       (
-         seller_id,
-         name,
-         category,
-         condition_name,
-         price,
-         original_price,
-         rating,
-         sold,
-         stock,
-         location,
-         featured,
-         image,
-         gallery,
-         description,
-         ownership,
-         note,
-         status
-       )
-       VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
+      (
+        seller_id,
+        name,
+        category,
+        condition_name,
+        price,
+        original_price,
+        rating,
+        sold,
+        stock,
+        location,
+        featured,
+        image,
+        gallery,
+        description,
+        ownership,
+        note,
+        status
+      )
+      VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
       [
         sellerId,
         p.name,
@@ -152,7 +165,9 @@ async function seedDatabase() {
         p.location || "Indonesia",
         p.featured ? 1 : 0,
         p.img,
-        JSON.stringify(p.gallery || [p.img]),
+        JSON.stringify(
+          p.gallery || [p.img]
+        ),
         p.description || "",
         "",
         "",
@@ -178,6 +193,7 @@ app.get("/api/health", async (req, res) => {
     return ok(res, {
       message: "Server dan MySQL aktif."
     });
+
   } catch (e) {
     console.error(e);
 
@@ -231,13 +247,13 @@ app.post("/api/register", async (req, res) => {
       );
     }
 
-    const hash = await bcrypt.hash(
-      password,
-      10
-    );
+    const hash =
+      await bcrypt.hash(password, 10);
 
     const [r] = await pool.query(
-      "INSERT INTO users (name,email,password) VALUES (?,?,?)",
+      `INSERT INTO users
+      (name,email,password)
+      VALUES (?,?,?)`,
       [
         name.trim(),
         email.trim().toLowerCase(),
@@ -245,7 +261,8 @@ app.post("/api/register", async (req, res) => {
       ]
     );
 
-    req.session.userId = r.insertId;
+    req.session.userId =
+      r.insertId;
 
     return ok(res, {
       message: "Akun berhasil dibuat!",
@@ -298,10 +315,13 @@ app.post("/api/login", async (req, res) => {
 
     const user = rows[0];
 
-    if (!(await bcrypt.compare(
-      password,
-      user.password
-    ))) {
+    const passwordCorrect =
+      await bcrypt.compare(
+        password,
+        user.password
+      );
+
+    if (!passwordCorrect) {
       return fail(
         res,
         401,
@@ -309,7 +329,8 @@ app.post("/api/login", async (req, res) => {
       );
     }
 
-    req.session.userId = user.id;
+    req.session.userId =
+      user.id;
 
     return ok(res, {
       message: "Login berhasil!",
@@ -336,6 +357,7 @@ app.post("/api/login", async (req, res) => {
 
 
 app.get("/api/me", async (req, res) => {
+
   if (!req.session.userId) {
     return fail(
       res,
@@ -345,6 +367,7 @@ app.get("/api/me", async (req, res) => {
   }
 
   try {
+
     const [rows] = await pool.query(
       `SELECT
         id,
@@ -354,8 +377,8 @@ app.get("/api/me", async (req, res) => {
         bio,
         avatar,
         created_at
-       FROM users
-       WHERE id=?`,
+      FROM users
+      WHERE id=?`,
       [req.session.userId]
     );
 
@@ -385,21 +408,22 @@ app.get("/api/me", async (req, res) => {
 });
 
 
-app.post("/api/logout", (req, res) => {
-  req.session.destroy(e => {
-    if (e) {
-      return fail(
-        res,
-        500,
-        "Gagal logout."
-      );
-    }
-
-    return ok(res, {
-      message: "Berhasil logout."
-    });
-  });
-});
+app.post(
+  "/api/logout",
+  (req, res) =>
+    req.session.destroy(
+      e =>
+        e
+          ? fail(
+              res,
+              500,
+              "Gagal logout."
+            )
+          : ok(res, {
+              message: "Berhasil logout."
+            })
+    )
+);
 
 
 // ======================================================
@@ -407,9 +431,11 @@ app.post("/api/logout", (req, res) => {
 // ======================================================
 
 function productSelect() {
+
   return `
     SELECT
       p.*,
+
       u.name AS seller_name,
       u.avatar AS seller_avatar,
       u.email AS seller_email,
@@ -428,7 +454,6 @@ function productSelect() {
       ) AS seller_rating
 
     FROM products p
-
     JOIN users u
       ON u.id = p.seller_id
   `;
@@ -440,75 +465,91 @@ function productSelect() {
 // ======================================================
 
 function mapProduct(p) {
+
   let gallery = [];
 
   try {
+
     gallery =
       typeof p.gallery === "string"
         ? JSON.parse(p.gallery)
         : (p.gallery || []);
+
   } catch (e) {
+
     gallery = [];
   }
 
-  /*
-   * =====================================================
-   * PERBAIKAN GAMBAR
-   * =====================================================
-   *
-   * Database Railway saat ini mempunyai beberapa gambar
-   * dalam bentuk Base64:
-   *
-   * data:image/jpeg;base64,...
-   *
-   * Sedangkan gambar demo yang ada di seed-data.js
-   * menggunakan URL Picsum.
-   *
-   * Kalau gambar database berupa Base64, cari produk
-   * dengan nama yang sama di SS_PRODUCTS lalu gunakan
-   * gambar dari seed-data.js.
-   */
 
-  let image = p.image || "";
+  // ====================================================
+  // GAMBAR
+  // ====================================================
+
+  let image =
+    p.image ||
+    (gallery.length
+      ? gallery[0]
+      : "");
+
+
+  // ====================================================
+  // FIX BASE64 IMAGE
+  //
+  // Jika database berisi:
+  // data:image/jpeg;base64,...
+  //
+  // otomatis diganti menjadi gambar publik.
+  // ====================================================
 
   if (
     typeof image === "string" &&
     image.startsWith("data:image/")
   ) {
-    const demoProduct = SS_PRODUCTS.find(
-      item =>
-        String(item.name || "")
-          .trim()
-          .toLowerCase() ===
-        String(p.name || "")
-          .trim()
-          .toLowerCase()
-    );
 
-    if (demoProduct && demoProduct.img) {
-      image = demoProduct.img;
-
-      if (
-        Array.isArray(demoProduct.gallery) &&
-        demoProduct.gallery.length
-      ) {
-        gallery = demoProduct.gallery;
-      } else {
-        gallery = [demoProduct.img];
-      }
-    }
+    image =
+      `https://picsum.photos/seed/second-stories-${p.id}/500/500`;
   }
 
-  /*
-   * Kalau gambar utama kosong,
-   * gunakan gambar pertama dari gallery.
-   */
+
+  // ====================================================
+  // FIX BASE64 GALLERY
+  // ====================================================
+
+  if (
+    !Array.isArray(gallery) ||
+    gallery.length === 0
+  ) {
+
+    gallery = [image];
+
+  } else {
+
+    gallery = gallery.map(
+      (img, index) => {
+
+        if (
+          typeof img === "string" &&
+          img.startsWith("data:image/")
+        ) {
+
+          return `https://picsum.photos/seed/second-stories-${p.id}-${index}/500/500`;
+        }
+
+        return img;
+      }
+    );
+  }
+
+
+  // Pastikan image tidak kosong
 
   if (!image && gallery.length) {
     image = gallery[0];
   }
 
+
   return {
+
     id: Number(p.id),
 
     name: p.name,
@@ -517,51 +558,72 @@ function mapProduct(p) {
 
     condition: p.condition_name,
 
-    price: Number(p.price || 0),
+    price: Number(
+      p.price || 0
+    ),
 
     originalPrice:
       p.original_price == null
         ? null
-        : Number(p.original_price),
+        : Number(
+            p.original_price
+          ),
 
-    rating: Number(p.rating || 0),
+    rating: Number(
+      p.rating || 0
+    ),
 
-    sold: Number(p.sold || 0),
+    sold: Number(
+      p.sold || 0
+    ),
 
-    stock: Number(p.stock || 0),
+    stock: Number(
+      p.stock || 0
+    ),
 
     location:
-      p.location || "Indonesia",
+      p.location ||
+      "Indonesia",
 
-    featured: !!p.featured,
+    featured:
+      !!p.featured,
 
-    /*
-     * Gambar yang sudah diperbaiki.
-     */
     img: image,
 
     gallery: gallery,
 
     seller: {
-      id: Number(p.seller_id),
 
-      name: p.seller_name || "",
+      id: Number(
+        p.seller_id
+      ),
 
-      avatar: p.seller_avatar || "",
+      name:
+        p.seller_name ||
+        "",
 
-      rating: Number(
-        p.seller_rating || 0
-      )
+      avatar:
+        p.seller_avatar ||
+        "",
+
+      rating:
+        Number(
+          p.seller_rating ||
+          0
+        )
     },
 
     description:
-      p.description || "",
+      p.description ||
+      "",
 
     ownership:
-      p.ownership || "",
+      p.ownership ||
+      "",
 
     note:
-      p.note || "",
+      p.note ||
+      "",
 
     status:
       p.status,
@@ -576,145 +638,195 @@ function mapProduct(p) {
 // GET PRODUCTS
 // ======================================================
 
-app.get("/api/products", async (req, res) => {
-  try {
-    const {
-      category,
-      condition,
-      search,
-      maxPrice,
-      sort,
-      featured
-    } = req.query;
+app.get(
+  "/api/products",
+  async (req, res) => {
 
-    const where = [
-      "p.status='active'"
-    ];
+    try {
 
-    const args = [];
+      const {
+        category,
+        condition,
+        search,
+        maxPrice,
+        sort,
+        featured
+      } = req.query;
 
-    if (category) {
-      where.push(
-        "p.category=?"
-      );
+      const where = [
+        "p.status='active'"
+      ];
 
-      args.push(category);
-    }
-
-    if (condition) {
-      where.push(
-        "p.condition_name=?"
-      );
-
-      args.push(condition);
-    }
-
-    if (search) {
-      where.push(
-        "(p.name LIKE ? OR p.category LIKE ?)"
-      );
-
-      args.push(
-        `%${search}%`,
-        `%${search}%`
-      );
-    }
-
-    if (
-      maxPrice &&
-      Number(maxPrice) > 0
-    ) {
-      where.push(
-        "p.price<=?"
-      );
-
-      args.push(
-        Number(maxPrice)
-      );
-    }
-
-    if (featured === "true") {
-      where.push(
-        "p.featured=1"
-      );
-    }
-
-    let order =
-      "p.created_at DESC, p.id DESC";
-
-    if (sort === "termurah") {
-      order =
-        "p.price ASC";
-    }
-
-    if (sort === "termahal") {
-      order =
-        "p.price DESC";
-    }
-
-    if (sort === "terlaris") {
-      order =
-        "p.sold DESC, p.id DESC";
-    }
-
-    const [rows] = await pool.query(
-      `${productSelect()}
-       WHERE ${where.join(" AND ")}
-       ORDER BY ${order}`,
-      args
-    );
-
-    return ok(res, {
-      products: rows.map(mapProduct)
-    });
-
-  } catch (e) {
-    console.error(e);
-
-    return fail(
-      res,
-      500,
-      "Gagal mengambil produk."
-    );
-  }
-});
+      const args = [];
 
 
-// ======================================================
-// GET SINGLE PRODUCT
-// ======================================================
+      if (category) {
 
-app.get("/api/products/:id", async (req, res) => {
-  try {
-    const [rows] = await pool.query(
-      `${productSelect()}
-       WHERE p.id=?
-       AND p.status='active'`,
-      [req.params.id]
-    );
+        where.push(
+          "p.category=?"
+        );
 
-    if (!rows.length) {
+        args.push(category);
+      }
+
+
+      if (condition) {
+
+        where.push(
+          "p.condition_name=?"
+        );
+
+        args.push(condition);
+      }
+
+
+      if (search) {
+
+        where.push(
+          "(p.name LIKE ? OR p.category LIKE ?)"
+        );
+
+        args.push(
+          `%${search}%`,
+          `%${search}%`
+        );
+      }
+
+
+      if (
+        maxPrice &&
+        Number(maxPrice) > 0
+      ) {
+
+        where.push(
+          "p.price<=?"
+        );
+
+        args.push(
+          Number(maxPrice)
+        );
+      }
+
+
+      if (
+        featured === "true"
+      ) {
+
+        where.push(
+          "p.featured=1"
+        );
+      }
+
+
+      let order =
+        "p.created_at DESC, p.id DESC";
+
+
+      if (
+        sort === "termurah"
+      ) {
+
+        order =
+          "p.price ASC";
+      }
+
+
+      if (
+        sort === "termahal"
+      ) {
+
+        order =
+          "p.price DESC";
+      }
+
+
+      if (
+        sort === "terlaris"
+      ) {
+
+        order =
+          "p.sold DESC, p.id DESC";
+      }
+
+
+      const [rows] =
+        await pool.query(
+          `${productSelect()}
+           WHERE ${where.join(" AND ")}
+           ORDER BY ${order}`,
+          args
+        );
+
+
+      return ok(res, {
+        products:
+          rows.map(
+            mapProduct
+          )
+      });
+
+
+    } catch (e) {
+
+      console.error(e);
+
       return fail(
         res,
-        404,
-        "Produk tidak ditemukan."
+        500,
+        "Gagal mengambil produk."
       );
     }
-
-    return ok(res, {
-      product: mapProduct(rows[0])
-    });
-
-  } catch (e) {
-    console.error(e);
-
-    return fail(
-      res,
-      500,
-      "Gagal mengambil produk."
-    );
   }
-});
+);
+
+
+// ======================================================
+// GET PRODUCT DETAIL
+// ======================================================
+
+app.get(
+  "/api/products/:id",
+  async (req, res) => {
+
+    try {
+
+      const [rows] =
+        await pool.query(
+          `${productSelect()}
+           WHERE p.id=?
+           AND p.status='active'`,
+          [req.params.id]
+        );
+
+
+      if (!rows.length) {
+
+        return fail(
+          res,
+          404,
+          "Produk tidak ditemukan."
+        );
+      }
+
+
+      return ok(res, {
+        product:
+          mapProduct(rows[0])
+      });
+
+
+    } catch (e) {
+
+      console.error(e);
+
+      return fail(
+        res,
+        500,
+        "Gagal mengambil produk."
+      );
+    }
+  }
+);
 
 
 // ======================================================
@@ -725,7 +837,9 @@ app.get(
   "/api/wishlist",
   requireAuth,
   async (req, res) => {
+
     try {
+
       const [rows] =
         await pool.query(
           `SELECT product_id
@@ -735,13 +849,19 @@ app.get(
           [req.session.userId]
         );
 
+
       return ok(res, {
-        ids: rows.map(
-          r => Number(r.product_id)
-        )
+        ids:
+          rows.map(
+            r => Number(
+              r.product_id
+            )
+          )
       });
 
+
     } catch (e) {
+
       console.error(e);
 
       return fail(
@@ -758,7 +878,9 @@ app.post(
   "/api/wishlist/:id",
   requireAuth,
   async (req, res) => {
+
     try {
+
       const [p] =
         await pool.query(
           `SELECT id
@@ -768,7 +890,9 @@ app.post(
           [req.params.id]
         );
 
+
       if (!p.length) {
+
         return fail(
           res,
           404,
@@ -776,9 +900,11 @@ app.post(
         );
       }
 
+
       await pool.query(
-        `INSERT IGNORE INTO
-         wishlist_items(user_id,product_id)
+        `INSERT IGNORE
+         INTO wishlist_items
+         (user_id,product_id)
          VALUES(?,?)`,
         [
           req.session.userId,
@@ -786,11 +912,14 @@ app.post(
         ]
       );
 
+
       return ok(res, {
         added: true
       });
 
+
     } catch (e) {
+
       console.error(e);
 
       return fail(
@@ -807,7 +936,9 @@ app.delete(
   "/api/wishlist/:id",
   requireAuth,
   async (req, res) => {
+
     try {
+
       await pool.query(
         `DELETE FROM wishlist_items
          WHERE user_id=?
@@ -818,11 +949,14 @@ app.delete(
         ]
       );
 
+
       return ok(res, {
         added: false
       });
 
+
     } catch (e) {
+
       console.error(e);
 
       return fail(
@@ -843,42 +977,51 @@ app.get(
   "/api/cart",
   requireAuth,
   async (req, res) => {
+
     try {
+
       const [rows] =
         await pool.query(
           `SELECT
-             p.*,
-             u.name AS seller_name,
-             u.avatar AS seller_avatar,
-             u.email AS seller_email,
-             u.location AS seller_location,
-             u.bio AS seller_bio,
-             c.quantity
+            p.*,
+            u.name AS seller_name,
+            u.avatar AS seller_avatar,
+            u.email AS seller_email,
+            u.location AS seller_location,
+            u.bio AS seller_bio,
+            c.quantity
 
-           FROM cart_items c
+          FROM cart_items c
 
-           JOIN products p
-             ON p.id=c.product_id
+          JOIN products p
+            ON p.id=c.product_id
 
-           JOIN users u
-             ON u.id=p.seller_id
+          JOIN users u
+            ON u.id=p.seller_id
 
-           WHERE c.user_id=?
+          WHERE c.user_id=?
 
-           ORDER BY c.created_at DESC`,
+          ORDER BY c.created_at DESC`,
           [req.session.userId]
         );
 
+
       return ok(res, {
-        cart: rows.map(
-          r => ({
-            ...mapProduct(r),
-            qty: Number(r.quantity)
-          })
-        )
+        cart:
+          rows.map(
+            r => ({
+              ...mapProduct(r),
+              qty:
+                Number(
+                  r.quantity
+                )
+            })
+          )
       });
 
+
     } catch (e) {
+
       console.error(e);
 
       return fail(
@@ -895,7 +1038,9 @@ app.post(
   "/api/cart",
   requireAuth,
   async (req, res) => {
+
     try {
+
       const {
         productId,
         quantity = 1
@@ -907,6 +1052,7 @@ app.post(
           Number(quantity)
         );
 
+
       const [p] =
         await pool.query(
           `SELECT id,stock
@@ -916,13 +1062,16 @@ app.post(
           [productId]
         );
 
+
       if (!p.length) {
+
         return fail(
           res,
           404,
           "Produk tidak ditemukan."
         );
       }
+
 
       const [existing] =
         await pool.query(
@@ -936,15 +1085,19 @@ app.post(
           ]
         );
 
+
       const newQty =
         Number(
-          existing[0]?.quantity || 0
+          existing[0]?.quantity ||
+          0
         ) + qty;
+
 
       if (
         newQty >
         p[0].stock
       ) {
+
         return fail(
           res,
           400,
@@ -952,13 +1105,15 @@ app.post(
         );
       }
 
+
       await pool.query(
         `INSERT INTO cart_items
-         (user_id,product_id,quantity)
-         VALUES(?,?,?)
+        (user_id,product_id,quantity)
 
-         ON DUPLICATE KEY UPDATE
-         quantity=?`,
+        VALUES(?,?,?)
+
+        ON DUPLICATE KEY UPDATE
+        quantity=?`,
         [
           req.session.userId,
           productId,
@@ -967,12 +1122,15 @@ app.post(
         ]
       );
 
+
       return ok(res, {
         message:
           "Produk ditambahkan ke keranjang."
       });
 
+
     } catch (e) {
+
       console.error(e);
 
       return fail(
@@ -989,12 +1147,17 @@ app.put(
   "/api/cart/:id",
   requireAuth,
   async (req, res) => {
+
     try {
+
       const qty =
         Math.max(
           1,
-          Number(req.body.quantity)
+          Number(
+            req.body.quantity
+          )
         );
+
 
       const [p] =
         await pool.query(
@@ -1005,7 +1168,9 @@ app.put(
           [req.params.id]
         );
 
+
       if (!p.length) {
+
         return fail(
           res,
           404,
@@ -1013,16 +1178,19 @@ app.put(
         );
       }
 
+
       if (
         qty >
         p[0].stock
       ) {
+
         return fail(
           res,
           400,
           `Jumlah melebihi stok. Maksimal ${p[0].stock}.`
         );
       }
+
 
       const [r] =
         await pool.query(
@@ -1037,7 +1205,11 @@ app.put(
           ]
         );
 
-      if (!r.affectedRows) {
+
+      if (
+        !r.affectedRows
+      ) {
+
         return fail(
           res,
           404,
@@ -1045,9 +1217,12 @@ app.put(
         );
       }
 
+
       return ok(res);
 
+
     } catch (e) {
+
       console.error(e);
 
       return fail(
@@ -1064,53 +1239,26 @@ app.delete(
   "/api/cart/:id",
   requireAuth,
   async (req, res) => {
+
     try {
-      const productId =
-        Number(req.params.id);
 
-      if (
-        !Number.isInteger(productId) ||
-        productId <= 0
-      ) {
-        return fail(
-          res,
-          400,
-          "ID produk tidak valid."
-        );
-      }
+      await pool.query(
+        `DELETE FROM cart_items
+         WHERE user_id=?
+         AND product_id=?`,
+        [
+          req.session.userId,
+          req.params.id
+        ]
+      );
 
-      const [r] =
-        await pool.query(
-          `DELETE FROM cart_items
-           WHERE user_id=?
-           AND product_id=?`,
-          [
-            req.session.userId,
-            productId
-          ]
-        );
 
-      if (!r.affectedRows) {
-        return fail(
-          res,
-          404,
-          "Produk tidak ada di keranjang."
-        );
-      }
+      return ok(res);
 
-      return ok(res, {
-        message:
-          "Produk berhasil dihapus dari keranjang.",
-
-        removed:
-          Number(r.affectedRows)
-      });
 
     } catch (e) {
-      console.error(
-        "DELETE CART ERROR:",
-        e
-      );
+
+      console.error(e);
 
       return fail(
         res,
@@ -1126,16 +1274,21 @@ app.delete(
   "/api/cart",
   requireAuth,
   async (req, res) => {
+
     try {
+
       await pool.query(
         `DELETE FROM cart_items
          WHERE user_id=?`,
         [req.session.userId]
       );
 
+
       return ok(res);
 
+
     } catch (e) {
+
       console.error(e);
 
       return fail(
@@ -1156,39 +1309,45 @@ app.post(
   "/api/orders",
   requireAuth,
   async (req, res) => {
+
     const conn =
       await pool.getConnection();
 
     try {
+
       const {
         shippingAddress,
         shippingCost = 15000,
         discount = 0
       } = req.body;
 
+
       await conn.beginTransaction();
+
 
       const [cart] =
         await conn.query(
           `SELECT
-             c.product_id,
-             c.quantity,
-             p.name,
-             p.price,
-             p.stock
+            c.product_id,
+            c.quantity,
+            p.name,
+            p.price,
+            p.stock
 
-           FROM cart_items c
+          FROM cart_items c
 
-           JOIN products p
-             ON p.id=c.product_id
+          JOIN products p
+            ON p.id=c.product_id
 
-           WHERE c.user_id=?
+          WHERE c.user_id=?
 
-           FOR UPDATE`,
+          FOR UPDATE`,
           [req.session.userId]
         );
 
+
       if (!cart.length) {
+
         await conn.rollback();
 
         return fail(
@@ -1198,13 +1357,19 @@ app.post(
         );
       }
 
+
       let subtotal = 0;
 
-      for (const item of cart) {
+
+      for (
+        const item of cart
+      ) {
+
         if (
           item.quantity >
           item.stock
         ) {
+
           await conn.rollback();
 
           return fail(
@@ -1214,46 +1379,68 @@ app.post(
           );
         }
 
+
         subtotal +=
           Number(item.price) *
           item.quantity;
       }
 
+
       const total =
         Math.max(
           0,
           subtotal -
-          Number(discount || 0) +
-          Number(shippingCost || 0)
+          Number(
+            discount || 0
+          ) +
+          Number(
+            shippingCost || 0
+          )
         );
+
 
       const [order] =
         await conn.query(
           `INSERT INTO orders
-           (
-             user_id,
-             total_amount,
-             status,
-             shipping_address,
-             shipping_cost,
-             discount
-           )
-           VALUES(?,?,?,?,?,?)`,
+          (
+            user_id,
+            total_amount,
+            status,
+            shipping_address,
+            shipping_cost,
+            discount
+          )
+
+          VALUES(?,?,?,?,?,?)`,
           [
             req.session.userId,
             total,
             "pending",
             shippingAddress || "",
-            Number(shippingCost || 0),
-            Number(discount || 0)
+            Number(
+              shippingCost || 0
+            ),
+            Number(
+              discount || 0
+            )
           ]
         );
 
-      for (const item of cart) {
+
+      for (
+        const item of cart
+      ) {
+
         await conn.query(
           `INSERT INTO order_items
-           (order_id,product_id,quantity,price)
-           VALUES(?,?,?,?)`,
+          (
+            order_id,
+            product_id,
+            quantity,
+            price
+          )
+
+          VALUES(?,?,?,?)`,
           [
             order.insertId,
             item.product_id,
@@ -1262,11 +1449,14 @@ app.post(
           ]
         );
 
+
         await conn.query(
           `UPDATE products
+
            SET
              stock=stock-?,
              sold=sold+?
+
            WHERE id=?`,
           [
             item.quantity,
@@ -1276,28 +1466,44 @@ app.post(
         );
       }
 
+
       await conn.query(
         `DELETE FROM cart_items
          WHERE user_id=?`,
         [req.session.userId]
       );
 
+
       await conn.commit();
+
 
       return ok(res, {
         order: {
-          id: order.insertId,
+          id:
+            order.insertId,
+
           subtotal,
+
           shipping:
-            Number(shippingCost || 0),
+            Number(
+              shippingCost || 0
+            ),
+
           discount:
-            Number(discount || 0),
+            Number(
+              discount || 0
+            ),
+
           total,
-          status: "pending"
+
+          status:
+            "pending"
         }
       });
 
+
     } catch (e) {
+
       await conn.rollback();
 
       console.error(e);
@@ -1309,6 +1515,7 @@ app.post(
       );
 
     } finally {
+
       conn.release();
     }
   }
@@ -1319,7 +1526,9 @@ app.get(
   "/api/orders",
   requireAuth,
   async (req, res) => {
+
     try {
+
       const [orders] =
         await pool.query(
           `SELECT *
@@ -1329,43 +1538,63 @@ app.get(
           [req.session.userId]
         );
 
-      for (const o of orders) {
+
+      for (
+        const o of orders
+      ) {
+
         const [items] =
           await pool.query(
             `SELECT
-               oi.*,
-               p.name,
-               p.image
+              oi.*,
+              p.name,
+              p.image
 
-             FROM order_items oi
+            FROM order_items oi
 
-             JOIN products p
-               ON p.id=oi.product_id
+            JOIN products p
+              ON p.id=oi.product_id
 
-             WHERE oi.order_id=?`,
+            WHERE oi.order_id=?`,
             [o.id]
           );
 
+
         o.items =
-          items.map(i => ({
-            name: i.name,
-            qty: Number(i.quantity),
-            price: Number(i.price),
-            img: i.image
-          }));
+          items.map(
+            i => ({
+              name: i.name,
+              qty:
+                Number(
+                  i.quantity
+                ),
+              price:
+                Number(
+                  i.price
+                ),
+              img:
+                i.image
+            })
+          );
+
 
         o.total =
-          Number(o.total_amount);
+          Number(
+            o.total_amount
+          );
 
         o.date =
           o.created_at;
       }
 
+
       return ok(res, {
         orders
       });
 
+
     } catch (e) {
+
       console.error(e);
 
       return fail(
@@ -1386,7 +1615,9 @@ app.get(
   "/api/my-products",
   requireAuth,
   async (req, res) => {
+
     try {
+
       const [rows] =
         await pool.query(
           `${productSelect()}
@@ -1395,12 +1626,17 @@ app.get(
           [req.session.userId]
         );
 
+
       return ok(res, {
         products:
-          rows.map(mapProduct)
+          rows.map(
+            mapProduct
+          )
       });
 
+
     } catch (e) {
+
       console.error(e);
 
       return fail(
@@ -1417,7 +1653,9 @@ app.post(
   "/api/products",
   requireAuth,
   async (req, res) => {
+
     try {
+
       const {
         name,
         price,
@@ -1430,6 +1668,7 @@ app.post(
         images = []
       } = req.body;
 
+
       if (
         !name ||
         !price ||
@@ -1437,6 +1676,7 @@ app.post(
         !condition ||
         !description
       ) {
+
         return fail(
           res,
           400,
@@ -1444,10 +1684,12 @@ app.post(
         );
       }
 
+
       if (
         !Array.isArray(images) ||
         !images.length
       ) {
+
         return fail(
           res,
           400,
@@ -1455,33 +1697,47 @@ app.post(
         );
       }
 
+
       const [r] =
         await pool.query(
           `INSERT INTO products
-           (
-             seller_id,
-             name,
-             category,
-             condition_name,
-             price,
-             rating,
-             sold,
-             stock,
-             location,
-             featured,
-             image,
-             gallery,
-             description,
-             ownership,
-             note,
-             status
-           )
-           VALUES(
-             ?,?,?,?,?,
-             0,0,1,?,0,
-             ?,?,?, ?,?,
-             'active'
-           )`,
+          (
+            seller_id,
+            name,
+            category,
+            condition_name,
+            price,
+            rating,
+            sold,
+            stock,
+            location,
+            featured,
+            image,
+            gallery,
+            description,
+            ownership,
+            note,
+            status
+          )
+
+          VALUES(
+            ?,
+            ?,
+            ?,
+            ?,
+            ?,
+            0,
+            0,
+            1,
+            ?,
+            0,
+            ?,
+            ?,
+            ?,
+            ?,
+            ?,
+            'active'
+          )`,
           [
             req.session.userId,
             name.trim(),
@@ -1497,15 +1753,17 @@ app.post(
           ]
         );
 
+
       return ok(res, {
         message:
           "Barang berhasil dipublikasikan!",
-
         productId:
           r.insertId
       });
 
+
     } catch (e) {
+
       console.error(e);
 
       return fail(
@@ -1522,7 +1780,9 @@ app.delete(
   "/api/products/:id",
   requireAuth,
   async (req, res) => {
+
     try {
+
       const [r] =
         await pool.query(
           `UPDATE products
@@ -1535,7 +1795,11 @@ app.delete(
           ]
         );
 
-      if (!r.affectedRows) {
+
+      if (
+        !r.affectedRows
+      ) {
+
         return fail(
           res,
           404,
@@ -1543,11 +1807,13 @@ app.delete(
         );
       }
 
+
       await pool.query(
         `DELETE FROM cart_items
          WHERE product_id=?`,
         [req.params.id]
       );
+
 
       await pool.query(
         `DELETE FROM wishlist_items
@@ -1555,12 +1821,15 @@ app.delete(
         [req.params.id]
       );
 
+
       return ok(res, {
         message:
           "Barang disembunyikan dari etalase."
       });
 
+
     } catch (e) {
+
       console.error(e);
 
       return fail(
@@ -1577,13 +1846,17 @@ app.patch(
   "/api/products/:id/sold",
   requireAuth,
   async (req, res) => {
+
     try {
+
       const [r] =
         await pool.query(
           `UPDATE products
+
            SET
              status='sold',
              stock=0
+
            WHERE id=?
            AND seller_id=?`,
           [
@@ -1592,7 +1865,11 @@ app.patch(
           ]
         );
 
-      if (!r.affectedRows) {
+
+      if (
+        !r.affectedRows
+      ) {
+
         return fail(
           res,
           404,
@@ -1600,11 +1877,13 @@ app.patch(
         );
       }
 
+
       await pool.query(
         `DELETE FROM cart_items
          WHERE product_id=?`,
         [req.params.id]
       );
+
 
       await pool.query(
         `DELETE FROM wishlist_items
@@ -1612,12 +1891,15 @@ app.patch(
         [req.params.id]
       );
 
+
       return ok(res, {
         message:
           "Barang ditandai terjual."
       });
 
+
     } catch (e) {
+
       console.error(e);
 
       return fail(
@@ -1638,17 +1920,19 @@ app.get(
   "/api/profile",
   requireAuth,
   async (req, res) => {
+
     try {
+
       const [[u]] =
         await pool.query(
           `SELECT
-             id,
-             name,
-             email,
-             location,
-             bio,
-             avatar,
-             created_at
+            id,
+            name,
+            email,
+            location,
+            bio,
+            avatar,
+            created_at
 
            FROM users
 
@@ -1656,11 +1940,16 @@ app.get(
           [req.session.userId]
         );
 
+
       const [[s]] =
         await pool.query(
           `SELECT
-             COALESCE(SUM(sold),0) sold,
-             COUNT(*) posted
+            COALESCE(
+              SUM(sold),
+              0
+            ) sold,
+
+            COUNT(*) posted
 
            FROM products
 
@@ -1668,11 +1957,17 @@ app.get(
           [req.session.userId]
         );
 
+
       const [[rv]] =
         await pool.query(
           `SELECT
-             COALESCE(AVG(r.rating),0) rating,
-             COUNT(r.id) review_count
+            COALESCE(
+              AVG(r.rating),
+              0
+            ) rating,
+
+            COUNT(r.id)
+              review_count
 
            FROM reviews r
 
@@ -1683,25 +1978,38 @@ app.get(
           [req.session.userId]
         );
 
+
       return ok(res, {
+
         user: u,
 
         stats: {
+
           sold:
-            Number(s.sold),
+            Number(
+              s.sold
+            ),
 
           posted:
-            Number(s.posted),
+            Number(
+              s.posted
+            ),
 
           rating:
-            Number(rv.rating || 0),
+            Number(
+              rv.rating || 0
+            ),
 
           reviewCount:
-            Number(rv.review_count || 0)
+            Number(
+              rv.review_count || 0
+            )
         }
       });
 
+
     } catch (e) {
+
       console.error(e);
 
       return fail(
@@ -1718,7 +2026,9 @@ app.put(
   "/api/profile",
   requireAuth,
   async (req, res) => {
+
     try {
+
       const {
         name,
         location,
@@ -1726,30 +2036,36 @@ app.put(
         avatar
       } = req.body;
 
+
       const cleanName =
         typeof name === "string"
           ? name.trim()
           : undefined;
+
 
       const cleanLocation =
         typeof location === "string"
           ? location.trim()
           : undefined;
 
+
       const cleanBio =
         typeof bio === "string"
           ? bio.trim()
           : undefined;
+
 
       const cleanAvatar =
         typeof avatar === "string"
           ? avatar
           : undefined;
 
+
       if (
         cleanName !== undefined &&
         !cleanName
       ) {
+
         return fail(
           res,
           400,
@@ -1757,10 +2073,12 @@ app.put(
         );
       }
 
+
       if (
         cleanLocation !== undefined &&
         !cleanLocation
       ) {
+
         return fail(
           res,
           400,
@@ -1768,8 +2086,10 @@ app.put(
         );
       }
 
+
       await pool.query(
         `UPDATE users
+
          SET
            name=COALESCE(?,name),
            location=COALESCE(?,location),
@@ -1786,16 +2106,17 @@ app.put(
         ]
       );
 
+
       const [[u]] =
         await pool.query(
           `SELECT
-             id,
-             name,
-             email,
-             location,
-             bio,
-             avatar,
-             created_at
+            id,
+            name,
+            email,
+            location,
+            bio,
+            avatar,
+            created_at
 
            FROM users
 
@@ -1803,11 +2124,14 @@ app.put(
           [req.session.userId]
         );
 
+
       return ok(res, {
         user: u
       });
 
+
     } catch (e) {
+
       console.error(
         "PROFILE UPDATE ERROR:",
         e
@@ -1830,13 +2154,15 @@ app.put(
 app.get(
   "/api/products/:id/reviews",
   async (req, res) => {
+
     try {
+
       const [rows] =
         await pool.query(
           `SELECT
-             r.*,
-             u.name,
-             u.avatar
+            r.*,
+            u.name,
+            u.avatar
 
            FROM reviews r
 
@@ -1849,22 +2175,30 @@ app.get(
           [req.params.id]
         );
 
+
       return ok(res, {
+
         reviews:
-          rows.map(r => ({
-            id: r.id,
-            name: r.name,
-            avatar: r.avatar,
-            rating:
-              Number(r.rating),
-            comment:
-              r.comment,
-            date:
-              r.created_at
-          }))
+          rows.map(
+            r => ({
+              id: r.id,
+              name: r.name,
+              avatar: r.avatar,
+              rating:
+                Number(
+                  r.rating
+                ),
+              comment:
+                r.comment,
+              date:
+                r.created_at
+            })
+          )
       });
 
+
     } catch (e) {
+
       console.error(e);
 
       return fail(
@@ -1881,25 +2215,34 @@ app.post(
   "/api/products/:id/reviews",
   requireAuth,
   async (req, res) => {
+
     try {
+
       const rating =
-        Number(req.body.rating);
+        Number(
+          req.body.rating
+        );
 
       const comment =
-        (req.body.comment || "")
-          .trim();
+        (
+          req.body.comment ||
+          ""
+        ).trim();
+
 
       if (
         rating < 1 ||
         rating > 5 ||
         !comment
       ) {
+
         return fail(
           res,
           400,
           "Rating dan komentar wajib diisi."
         );
       }
+
 
       const [pRows] =
         await pool.query(
@@ -1909,7 +2252,9 @@ app.post(
           [req.params.id]
         );
 
+
       if (!pRows.length) {
+
         return fail(
           res,
           404,
@@ -1917,16 +2262,23 @@ app.post(
         );
       }
 
+
       if (
-        Number(pRows[0].seller_id) ===
-        Number(req.session.userId)
+        Number(
+          pRows[0].seller_id
+        ) ===
+        Number(
+          req.session.userId
+        )
       ) {
+
         return fail(
           res,
           400,
           "Kamu tidak bisa mengulas barang sendiri."
         );
       }
+
 
       const [bought] =
         await pool.query(
@@ -1947,13 +2299,16 @@ app.post(
           ]
         );
 
+
       if (!bought.length) {
+
         return fail(
           res,
           403,
           "Ulasan hanya dapat diberikan setelah membeli produk."
         );
       }
+
 
       const [already] =
         await pool.query(
@@ -1968,7 +2323,9 @@ app.post(
           ]
         );
 
+
       if (already.length) {
+
         return fail(
           res,
           400,
@@ -1976,10 +2333,17 @@ app.post(
         );
       }
 
+
       await pool.query(
         `INSERT INTO reviews
-         (user_id,product_id,rating,comment)
-         VALUES(?,?,?,?)`,
+        (
+          user_id,
+          product_id,
+          rating,
+          comment
+        )
+
+        VALUES(?,?,?,?)`,
         [
           req.session.userId,
           req.params.id,
@@ -1988,13 +2352,16 @@ app.post(
         ]
       );
 
+
       await pool.query(
         `UPDATE products
+
          SET rating=(
            SELECT AVG(rating)
            FROM reviews
            WHERE product_id=?
          )
+
          WHERE id=?`,
         [
           req.params.id,
@@ -2002,12 +2369,15 @@ app.post(
         ]
       );
 
+
       return ok(res, {
         message:
           "Ulasan berhasil ditambahkan."
       });
 
+
     } catch (e) {
+
       console.error(e);
 
       return fail(
@@ -2028,13 +2398,15 @@ app.get(
   "/api/my-reviews",
   requireAuth,
   async (req, res) => {
+
     try {
+
       const [rows] =
         await pool.query(
           `SELECT
-             r.*,
-             u.name AS reviewer_name,
-             p.name AS product_name
+            r.*,
+            u.name AS reviewer_name,
+            p.name AS product_name
 
            FROM reviews r
 
@@ -2050,24 +2422,32 @@ app.get(
           [req.session.userId]
         );
 
+
       return ok(res, {
+
         reviews:
-          rows.map(r => ({
-            id: r.id,
-            name:
-              r.reviewer_name,
-            rating:
-              Number(r.rating),
-            comment:
-              r.comment,
-            date:
-              r.created_at,
-            item:
-              r.product_name
-          }))
+          rows.map(
+            r => ({
+              id: r.id,
+              name:
+                r.reviewer_name,
+              rating:
+                Number(
+                  r.rating
+                ),
+              comment:
+                r.comment,
+              date:
+                r.created_at,
+              item:
+                r.product_name
+            })
+          )
       });
 
+
     } catch (e) {
+
       console.error(e);
 
       return fail(
@@ -2088,16 +2468,12 @@ app.get(
   "/api/conversations",
   requireAuth,
   async (req, res) => {
+
     try {
-      /*
-       * Tampilkan hanya satu thread untuk
-       * setiap pasangan user.
-       */
 
       const [rows] =
         await pool.query(
-          `
-          SELECT
+          `SELECT
             c.*,
 
             CASE
@@ -2112,48 +2488,48 @@ app.get(
               ELSE buyer.avatar
             END AS other_avatar
 
-          FROM conversations c
+           FROM conversations c
 
-          JOIN users buyer
-            ON buyer.id=c.buyer_id
+           JOIN users buyer
+             ON buyer.id=c.buyer_id
 
-          JOIN users seller
-            ON seller.id=c.seller_id
+           JOIN users seller
+             ON seller.id=c.seller_id
 
-          WHERE
-            (c.buyer_id=? OR c.seller_id=?)
+           WHERE
+             (c.buyer_id=? OR c.seller_id=?)
 
-            AND c.id = (
-              SELECT MIN(c2.id)
+           AND c.id = (
 
-              FROM conversations c2
+             SELECT MIN(c2.id)
 
-              WHERE
-                LEAST(
-                  c2.buyer_id,
-                  c2.seller_id
-                )
-                =
-                LEAST(
-                  c.buyer_id,
-                  c.seller_id
-                )
+             FROM conversations c2
 
-                AND
+             WHERE
+               LEAST(
+                 c2.buyer_id,
+                 c2.seller_id
+               )
+               =
+               LEAST(
+                 c.buyer_id,
+                 c.seller_id
+               )
 
-                GREATEST(
-                  c2.buyer_id,
-                  c2.seller_id
-                )
-                =
-                GREATEST(
-                  c.buyer_id,
-                  c.seller_id
-                )
-            )
+             AND
 
-          ORDER BY c.created_at DESC
-          `,
+               GREATEST(
+                 c2.buyer_id,
+                 c2.seller_id
+               )
+               =
+               GREATEST(
+                 c.buyer_id,
+                 c.seller_id
+               )
+           )
+
+           ORDER BY c.created_at DESC`,
           [
             req.session.userId,
             req.session.userId,
@@ -2162,7 +2538,11 @@ app.get(
           ]
         );
 
-      for (const c of rows) {
+
+      for (
+        const c of rows
+      ) {
+
         const [m] =
           await pool.query(
             `SELECT *
@@ -2172,15 +2552,19 @@ app.get(
             [c.id]
           );
 
+
         c.messages = m;
       }
+
 
       return ok(res, {
         conversations:
           rows
       });
 
+
     } catch (e) {
+
       console.error(e);
 
       return fail(
@@ -2197,13 +2581,17 @@ app.post(
   "/api/conversations",
   requireAuth,
   async (req, res) => {
+
     try {
+
       const {
         sellerId,
         productId
       } = req.body;
 
+
       if (!sellerId) {
+
         return fail(
           res,
           400,
@@ -2211,10 +2599,12 @@ app.post(
         );
       }
 
+
       if (
         Number(sellerId) ===
         Number(req.session.userId)
       ) {
+
         return fail(
           res,
           400,
@@ -2222,10 +2612,6 @@ app.post(
         );
       }
 
-      /*
-       * Satu percakapan per pasangan
-       * pembeli-penjual.
-       */
 
       const [r] =
         await pool.query(
@@ -2246,6 +2632,7 @@ app.post(
              )
 
            ORDER BY id ASC
+
            LIMIT 1`,
           [
             req.session.userId,
@@ -2255,18 +2642,26 @@ app.post(
           ]
         );
 
+
       if (r.length) {
+
         return ok(res, {
           conversationId:
             r[0].id
         });
       }
 
+
       const [n] =
         await pool.query(
           `INSERT INTO conversations
-           (buyer_id,seller_id,product_id)
-           VALUES(?,?,?)`,
+          (
+            buyer_id,
+            seller_id,
+            product_id
+          )
+
+          VALUES(?,?,?)`,
           [
             req.session.userId,
             sellerId,
@@ -2274,12 +2669,15 @@ app.post(
           ]
         );
 
+
       return ok(res, {
         conversationId:
           n.insertId
       });
 
+
     } catch (e) {
+
       console.error(e);
 
       return fail(
@@ -2296,18 +2694,25 @@ app.post(
   "/api/conversations/:id/messages",
   requireAuth,
   async (req, res) => {
+
     try {
+
       const text =
-        (req.body.message || "")
-          .trim();
+        (
+          req.body.message ||
+          ""
+        ).trim();
+
 
       if (!text) {
+
         return fail(
           res,
           400,
           "Pesan kosong."
         );
       }
+
 
       const [c] =
         await pool.query(
@@ -2316,7 +2721,8 @@ app.post(
 
            WHERE id=?
 
-           AND (
+           AND
+           (
              buyer_id=?
              OR seller_id=?
            )`,
@@ -2327,7 +2733,9 @@ app.post(
           ]
         );
 
+
       if (!c.length) {
+
         return fail(
           res,
           403,
@@ -2335,11 +2743,17 @@ app.post(
         );
       }
 
+
       const [r] =
         await pool.query(
           `INSERT INTO messages
-           (conversation_id,sender_id,message)
-           VALUES(?,?,?)`,
+          (
+            conversation_id,
+            sender_id,
+            message
+          )
+
+          VALUES(?,?,?)`,
           [
             req.params.id,
             req.session.userId,
@@ -2347,7 +2761,9 @@ app.post(
           ]
         );
 
+
       return ok(res, {
+
         message: {
           id:
             r.insertId,
@@ -2360,7 +2776,9 @@ app.post(
         }
       });
 
+
     } catch (e) {
+
       console.error(e);
 
       return fail(
@@ -2374,24 +2792,29 @@ app.post(
 
 
 // ======================================================
-// FRONTEND
+// STATIC FRONTEND
 // ======================================================
 
-const FRONTEND_DIR =
-  path.join(__dirname, "..");
-
 app.use(
-  express.static(FRONTEND_DIR)
+  express.static(
+    path.join(__dirname, "..")
+  )
 );
 
-app.get("/", (req, res) => {
-  res.sendFile(
-    path.join(
-      FRONTEND_DIR,
-      "homepage.html"
-    )
-  );
-});
+
+app.get(
+  "/",
+  (req, res) => {
+
+    res.sendFile(
+      path.join(
+        __dirname,
+        "..",
+        "homepage.html"
+      )
+    );
+  }
+);
 
 
 // ======================================================
@@ -2400,7 +2823,9 @@ app.get("/", (req, res) => {
 
 app.use(
   (err, req, res, next) => {
+
     console.error(err);
+
 
     if (
       err &&
@@ -2410,6 +2835,7 @@ app.use(
         err.status === 413
       )
     ) {
+
       return fail(
         res,
         413,
@@ -2417,17 +2843,20 @@ app.use(
       );
     }
 
+
     if (
       err &&
       err.type ===
         "entity.parse.failed"
     ) {
+
       return fail(
         res,
         400,
         "Data yang dikirim tidak valid."
       );
     }
+
 
     return fail(
       res,
@@ -2443,31 +2872,43 @@ app.use(
 // ======================================================
 
 (async () => {
+
   try {
-    await pool.query("SELECT 1");
+
+    await pool.query(
+      "SELECT 1"
+    );
 
     console.log(
       "Database berhasil terhubung!"
     );
 
+
     await seedDatabase();
+
 
     app.listen(
       PORT,
-      () =>
+      () => {
+
         console.log(
           `Server berjalan di http://localhost:${PORT}`
-        )
+        );
+
+      }
     );
 
+
   } catch (e) {
+
     console.error(
       "Database gagal terhubung."
     );
 
     console.error(
       "Kode error:",
-      e.code || "TIDAK DIKETAHUI"
+      e.code ||
+        "TIDAK DIKETAHUI"
     );
 
     console.error(
@@ -2496,4 +2937,5 @@ app.use(
 
     process.exit(1);
   }
+
 })();
