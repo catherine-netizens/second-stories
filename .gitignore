@@ -1,4 +1,4 @@
-# Environment variables / secrets
+# Environment variables / rahasia
 .env
 .env.*
 !.env.example
