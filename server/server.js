@@ -1,6 +1,7 @@
 require("dotenv").config();
 
 const express = require("express");
+const cors = require("cors");
 const mysql = require("mysql2/promise");
 const path = require("path");
 const bcrypt = require("bcrypt");
@@ -8,6 +9,10 @@ const session = require("express-session");
 const { SS_PRODUCTS } = require("./seed-data");
 
 const app = express();
+app.use(cors({
+  origin: "https://gorgeous-seahorse-3f0526.netlify.app",
+  credentials: true
+}));
 const PORT = Number(process.env.PORT || 3000);
 
 const pool = mysql.createPool({
