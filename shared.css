@@ -1,0 +1,176 @@
+/* ===== SS SHARED UI: toast, modal umum, auth modal ===== */
+
+.ss-toast-host {
+  position: fixed;
+  top: 18px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: center;
+  pointer-events: none;
+}
+.ss-toast {
+  background: var(--maroon, #7a1f31);
+  color: #fff;
+  padding: 12px 22px;
+  border-radius: 30px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.18);
+  opacity: 0;
+  transform: translateY(-12px);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+  white-space: nowrap;
+}
+.ss-toast.show { opacity: 1; transform: translateY(0); }
+.ss-toast-success { background: #2f7d3c; }
+.ss-toast-error { background: #b8283b; }
+.ss-toast-info { background: var(--maroon, #7a1f31); }
+
+/* ===== GENERIC MODAL SHELL ===== */
+.ss-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(74, 37, 48, 0.45);
+  z-index: 3000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  animation: ssFadeIn 0.2s ease;
+}
+.ss-modal-overlay[hidden] { display: none; }
+@keyframes ssFadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+.ss-modal-card {
+  background: var(--cream, #fcf6ed);
+  border-radius: 16px;
+  padding: 34px 30px;
+  max-width: 440px;
+  width: 100%;
+  max-height: 86vh;
+  overflow-y: auto;
+  position: relative;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.25);
+  animation: ssPopIn 0.25s ease;
+}
+@keyframes ssPopIn {
+  from { opacity: 0; transform: scale(0.94) translateY(8px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+.ss-modal-close {
+  position: absolute;
+  top: 16px; right: 16px;
+  background: transparent;
+  color: var(--ink-soft, #6b4450);
+  font-size: 1.1rem;
+  width: 32px; height: 32px;
+  border-radius: 50%;
+}
+.ss-modal-close:hover { background: rgba(0,0,0,0.06); }
+
+.ss-info-card h3 {
+  color: var(--maroon, #7a1f31);
+  font-size: 1.5rem;
+  margin-bottom: 16px;
+  padding-right: 20px;
+}
+.ss-info-card p {
+  font-size: 0.92rem;
+  line-height: 1.6;
+  color: var(--ink, #4a2530);
+  margin: 0 0 14px;
+}
+
+/* ===== AUTH MODAL ===== */
+.ss-auth-card { max-width: 400px; }
+.ss-auth-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 22px;
+  background: #fff;
+  border-radius: 30px;
+  padding: 4px;
+}
+.ss-auth-tab {
+  flex: 1;
+  background: transparent;
+  padding: 9px 0;
+  border-radius: 30px;
+  font-weight: 600;
+  font-size: 0.88rem;
+  color: var(--ink-soft, #6b4450);
+}
+.ss-auth-tab.active {
+  background: var(--maroon, #7a1f31);
+  color: #fff;
+}
+.ss-auth-title {
+  font-size: 1.4rem;
+  color: var(--maroon, #7a1f31);
+  margin-bottom: 18px;
+  padding-right: 20px;
+}
+.ss-auth-title span { color: var(--red-accent, #b8283b); }
+#ssAuthForm .field-label { display: block; font-size: 0.85rem; font-weight: 600; color: var(--ink, #4a2530); margin: 12px 0 6px; }
+#ssAuthForm .field-input {
+  width: 100%;
+  padding: 11px 14px;
+  border-radius: 8px;
+  border: 1.5px solid var(--paper-line, #e7d9c2);
+  font-family: inherit;
+  font-size: 0.92rem;
+  background: #fff;
+}
+#ssAuthForm .field-input:focus { outline: none; border-color: var(--pink-deep, #e88fa0); }
+.ss-auth-submit { width: 100%; margin-top: 20px; }
+.ss-auth-note {
+  font-size: 0.76rem;
+  color: var(--ink-soft, #6b4450);
+  text-align: center;
+  margin-top: 14px;
+  line-height: 1.5;
+}
+
+/* ===== WISHLIST / CART BADGE SHARED (untuk ikon header) ===== */
+.wishlist-badge-shared, .cart-badge-shared {
+  position: absolute;
+  top: -4px; right: -4px;
+  background: var(--red-accent, #b8283b);
+  color: #fff;
+  font-size: 0.65rem;
+  font-weight: 700;
+  min-width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 0 3px;
+}
+
+/* .cart-badge dipakai di beberapa halaman (homepage/category/product/wishlist)
+   yang tidak memuat sell.css, jadi didefinisikan juga di sini supaya konsisten
+   tampil di semua halaman. .icon-btn perlu position:relative agar badge ini
+   (position:absolute) menempel pas di pojok ikon. */
+.icon-btn { position: relative; }
+.cart-badge {
+  position: absolute;
+  top: -6px; right: -8px;
+  background: var(--red-accent, #b8283b);
+  color: #fff;
+  font-size: 0.65rem;
+  font-weight: 700;
+  width: 18px; height: 18px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@media (max-width: 640px) {
+  .ss-modal-card { padding: 26px 20px; }
+}

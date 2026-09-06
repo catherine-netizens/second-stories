@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Profil Saya — Second Stories</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Caveat:wght@600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="homepage.css">
+<link rel="stylesheet" href="sell.css">
+<link rel="stylesheet" href="shared.css">
+<link rel="stylesheet" href="profile.css">
+</head>
+<body class="sell-page profile-page">
+
+<!-- ===== HEADER (gingham, sama seperti halaman Jual Barang) ===== -->
+<header class="sell-header">
+  <div class="sell-header-inner">
+    <a href="homepage.html" class="logo-tag sell-logo-tag">
+      <div class="pin"></div>
+      <h1 class="logo">Second <span>Stories</span> <span class="tiny-heart">♡</span></h1>
+      <p class="logo-sub">preloved, re-loved, re-happy</p>
+    </a>
+
+    <nav class="main-nav">
+      <a href="homepage.html" class="nav-pill">Home</a>
+      <a href="category.html" class="nav-pill">Categories</a>
+      <a href="sell.html" class="nav-pill">Sell</a>
+      <a href="profile.html" class="nav-pill">Profile</a>
+    </nav>
+
+    <div class="header-actions">
+      <a href="wishlist.html" class="icon-btn sell-icon-btn wishlist-nav-icon" aria-label="Wishlist" style="text-decoration:none; position:relative;">
+        ♡<span class="wishlist-badge-shared">0</span>
+      </a>
+      <a href="cart.html" class="icon-btn sell-icon-btn cart-icon-link" aria-label="Keranjang" style="text-decoration:none; position:relative;">
+        🛍️<span class="cart-badge" id="cartBadge">0</span>
+      </a>
+      <button class="icon-btn sell-icon-btn cart-btn" id="chatToggleBtn" aria-label="Pesan">
+        💬<span class="cart-badge" id="chatBadge">0</span>
+      </button>
+      <button class="login-btn sell-login-btn">Login</button>
+    </div>
+  </div>
+  <div class="sell-header-tear"></div>
+</header>
+
+<!-- ===== STATE: BELUM LOGIN ===== -->
+<!-- Ditampilkan default (tidak "hidden") supaya pengunjung yang belum login
+     TIDAK PERNAH melihat konten/statistik profil, walau hanya sekilas atau
+     setelah menutup modal login. Baru disembunyikan oleh profile.js setelah
+     login benar-benar terverifikasi lewat /api/me. -->
+<section class="empty-cart" id="profileLoggedOutState" style="margin:70px auto; max-width:520px;">
+  <span class="empty-cart-icon">🔒</span>
+  <h3>Kamu belum login</h3>
+  <p>Masuk ke akunmu dulu untuk melihat profil, barang, pesanan, dan ulasan kamu.</p>
+  <button type="button" class="btn btn-primary" id="profileLoginPromptBtn">Masuk / Daftar</button>
+</section>
+
+<!-- ===== PROFILE HERO ===== -->
+<section class="profile-hero" id="profileHeroSection" hidden>
+  <div class="profile-hero-card">
+    <span class="deco sparkle ph-sparkle-1">✳</span>
+    <span class="deco sparkle ph-sparkle-2">✳</span>
+    <span class="deco flower ph-flower">✿</span>
+
+    <div class="avatar-wrap">
+      <img id="avatarImg" alt="Foto profil" onerror="ssAvatarFallback(this)">
+      <button class="avatar-edit-btn" id="avatarEditBtn" aria-label="Ganti foto profil">✎</button>
+    </div>
+
+    <div class="profile-info">
+      <h2 class="profile-name" id="profileName">User <span class="heart-outline">♡</span></h2>
+
+      <p class="profile-location">📍 <span id="profileLocation">Indonesia</span></p>
+
+      <p class="profile-rating">
+        <span class="stars" id="profileStars">☆☆☆☆☆</span>
+        <span id="ratingValue">0.0</span> (<span id="reviewCount">0</span> ulasan)
+      </p>
+
+      <p class="profile-verified">🛡 Terverifikasi oleh Second Stories ✓</p>
+    </div>
+
+    <div class="profile-note">
+      <div class="washi washi-blue profile-note-tape"></div>
+      <p>Good Items<br>Better Stories <span class="heart-outline">♡</span></p>
+    </div>
+  </div>
+
+  <!-- ===== STATS BAR ===== -->
+  <div class="stats-bar">
+    <div class="stat-item">
+      <span class="stat-icon">🏷</span>
+      <div>
+        <p class="stat-number" id="statSold">0</p>
+        <p class="stat-label">Kali jual barang bekas</p>
+      </div>
+    </div>
+    <span class="stat-divider"></span>
+    <div class="stat-item">
+      <span class="stat-icon">📦</span>
+      <div>
+        <p class="stat-number" id="statPosted">0</p>
+        <p class="stat-label">Barang yang diposting</p>
+      </div>
+    </div>
+    <span class="stat-divider"></span>
+    <div class="stat-item">
+      <span class="stat-icon">♡</span>
+      <div>
+        <p class="stat-number" id="statTrust">Belum ada</p>
+        <p class="stat-label">Rating kepercayaan</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== TABS ===== -->
+<section class="tabs-section" id="profileTabsSection" hidden>
+  <div class="tabs-bar">
+    <div class="tabs-group">
+      <button class="tab-btn active" data-tab="items">Barang Saya</button>
+      <button class="tab-btn" data-tab="orders">Pesanan Saya</button>
+      <button class="tab-btn" data-tab="reviews">Ulasan</button>
+      <button class="tab-btn" data-tab="about">Tentang Saya</button>
+    </div>
+    <button class="edit-profile-btn" id="editProfileBtn">⚙ Edit Profil</button>
+  </div>
+</section>
+
+<!-- ===== MAIN CONTENT ===== -->
+<main class="profile-main" id="profileMainContent" hidden>
+
+  <!-- ===== TAB: BARANG SAYA ===== -->
+  <section class="tab-panel" id="tab-items" data-tab-panel="items">
+    <div class="items-header">
+      <h3>Barang yang Saya Posting <span class="deco-inline">✎</span></h3>
+      <select class="sort-select" id="sortSelect">
+        <option value="terbaru">Terbaru</option>
+        <option value="termurah">Termurah</option>
+        <option value="termahal">Termahal</option>
+      </select>
+    </div>
+
+    <div class="my-items-grid" id="myItemsGrid"></div>
+  </section>
+
+  <!-- ===== TAB: PESANAN SAYA ===== -->
+  <section class="tab-panel" id="tab-orders" data-tab-panel="orders" hidden>
+    <div class="items-header">
+      <h3>Riwayat Pesanan <span class="deco-inline">📦</span></h3>
+    </div>
+    <div class="order-history-list" id="orderHistoryList"></div>
+    <div class="empty-cart" id="orderEmptyState" hidden>
+      <span class="empty-cart-icon">📦</span>
+      <h3>Belum ada pesanan</h3>
+      <p>Yuk mulai belanja barang preloved pilihanmu di Second Stories!</p>
+      <a href="category.html" class="btn btn-primary">Mulai Belanja</a>
+    </div>
+  </section>
+
+  <!-- ===== TAB: ULASAN ===== -->
+  <section class="tab-panel" id="tab-reviews" data-tab-panel="reviews" hidden>
+    <div class="reviews-summary">
+      <div class="reviews-score">
+        <p class="score-big" id="reviewsScoreBig">0.0</p>
+        <p class="stars" id="reviewsStars">☆☆☆☆☆</p>
+        <p class="score-sub" id="reviewsScoreSub">Belum ada ulasan</p>
+      </div>
+      <div class="reviews-bars">
+        <div class="bar-row"><span>5★</span><div class="bar"><span id="bar5" style="width:0%"></span></div><span id="count5">0</span></div>
+        <div class="bar-row"><span>4★</span><div class="bar"><span id="bar4" style="width:0%"></span></div><span id="count4">0</span></div>
+        <div class="bar-row"><span>3★</span><div class="bar"><span id="bar3" style="width:0%"></span></div><span id="count3">0</span></div>
+        <div class="bar-row"><span>2★</span><div class="bar"><span id="bar2" style="width:0%"></span></div><span id="count2">0</span></div>
+        <div class="bar-row"><span>1★</span><div class="bar"><span id="bar1" style="width:0%"></span></div><span id="count1">0</span></div>
+      </div>
+    </div>
+
+    <div class="review-list" id="reviewList"></div>
+  </section>
+
+  <!-- ===== TAB: TENTANG SAYA ===== -->
+  <section class="tab-panel" id="tab-about" data-tab-panel="about" hidden>
+    <div class="about-card">
+      <h3>Tentang Saya <span class="deco-inline">🌸</span></h3>
+      <p class="about-bio" id="aboutBio">
+        Belum ada bio. Kamu bisa menambahkan cerita tentang dirimu melalui tombol Edit Profil.
+      </p>
+
+      <div class="about-meta">
+        <div class="about-meta-item">
+          <span class="meta-icon">📅</span>
+          <div>
+            <p class="meta-label">Bergabung sejak</p>
+            <p class="meta-value" id="joinDate">Maret 2023</p>
+          </div>
+        </div>
+        <div class="about-meta-item">
+          <span class="meta-icon">⚡</span>
+          <div>
+            <p class="meta-label">Waktu respon rata-rata</p>
+            <p class="meta-value" id="responseTime">Belum ada data</p>
+          </div>
+        </div>
+        <div class="about-meta-item">
+          <span class="meta-icon">💬</span>
+          <div>
+            <p class="meta-label">Tingkat respon chat</p>
+            <p class="meta-value" id="responseRate">Belum ada data</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ===== FOOTER ===== -->
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <a href="homepage.html" class="logo" style="color:#fff; text-decoration:none;">Second <span>Stories</span></a>
+      <p class="logo-sub">preloved, re-loved, re-happy</p>
+      <div class="socials">
+        <a href="#" aria-label="Instagram">◎</a>
+        <a href="#" aria-label="TikTok">♪</a>
+        <a href="#" aria-label="Facebook">f</a>
+      </div>
+    </div>
+
+    <div class="footer-col">
+      <h5>Navigasi</h5>
+      <a href="homepage.html">Home</a>
+      <a href="category.html">Categories</a>
+      <a href="sell.html">Sell</a>
+      <a href="profile.html">Profile</a>
+    </div>
+
+    <div class="footer-col">
+      <h5>Bantuan</h5>
+      <a href="#" data-info="faq">FAQ</a>
+      <a href="#" data-info="pengiriman">Pengiriman</a>
+      <a href="#" data-info="pembayaran">Pembayaran</a>
+      <a href="#" data-info="tnc">Syarat &amp; Ketentuan</a>
+    </div>
+
+    <div class="footer-col newsletter-col">
+      <h5>Newsletter</h5>
+      <p>Dapatkan update dan promo menarik setiap minggu!</p>
+      <form class="newsletter-form" id="profileNewsletterForm">
+        <input type="email" placeholder="Masukkan email kamu" required>
+        <button type="submit" aria-label="Kirim">➤</button>
+      </form>
+    </div>
+
+    <div class="footer-cherry">🍒</div>
+  </div>
+</footer>
+
+<!-- ===== MODAL: EDIT PROFIL ===== -->
+<div class="modal-overlay" id="editModalOverlay" hidden>
+  <div class="modal-card">
+    <button class="modal-close" id="editModalClose" aria-label="Tutup">✕</button>
+    <h3>Edit Profil <span class="deco-inline">✎</span></h3>
+
+    <form id="editProfileForm">
+      <label class="field-label" for="editName">Nama</label>
+      <input type="text" id="editName" class="field-input" required>
+
+      <label class="field-label" for="editLocation">Lokasi</label>
+      <input type="text" id="editLocation" class="field-input" required>
+
+      <label class="field-label" for="editBio">Bio</label>
+      <textarea id="editBio" class="field-textarea" maxlength="300"></textarea>
+
+      <div class="modal-actions">
+        <button type="button" class="btn btn-outline-dark" id="editCancelBtn">Batal</button>
+        <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- ===== CHAT PANEL (Pesan) ===== -->
+<div class="chat-overlay" id="chatOverlay" hidden></div>
+<div class="chat-panel" id="chatPanel">
+  <div class="chat-panel-header">
+    <button class="chat-back-btn" id="chatBackBtn" hidden>←</button>
+    <p id="chatPanelTitle">Pesan</p>
+    <button class="chat-close-btn" id="chatCloseBtn" aria-label="Tutup pesan">✕</button>
+  </div>
+
+  <!-- daftar percakapan -->
+  <div class="chat-list" id="chatList"></div>
+
+  <!-- thread percakapan -->
+  <div class="chat-thread" id="chatThread" hidden>
+    <div class="chat-messages" id="chatMessages"></div>
+    <form class="chat-input-row" id="chatInputForm">
+      <input type="text" id="chatInput" placeholder="Tulis pesan..." autocomplete="off">
+      <button type="submit" aria-label="Kirim">➤</button>
+    </form>
+  </div>
+</div>
+
+<script src="products-data.js"></script>
+<script src="cart_shared.js"></script>
+<script src="shared.js"></script>
+<script src="profile.js"></script>
+</body>
+</html>

@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Keranjang &amp; Checkout — Second Stories</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Caveat:wght@600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="homepage.css">
+<link rel="stylesheet" href="sell.css">
+<link rel="stylesheet" href="shared.css">
+<link rel="stylesheet" href="cart.css">
+</head>
+<body class="sell-page cart-page">
+
+<!-- ===== HEADER (gingham, konsisten dengan halaman lain) ===== -->
+<header class="sell-header">
+  <div class="sell-header-inner">
+    <a href="homepage.html" class="logo-tag sell-logo-tag">
+      <div class="pin"></div>
+      <h1 class="logo">Second <span>Stories</span> <span class="tiny-heart">♡</span></h1>
+      <p class="logo-sub">preloved, re-loved, re-happy</p>
+    </a>
+
+    <nav class="main-nav">
+      <a href="homepage.html" class="nav-pill">Home</a>
+      <a href="category.html" class="nav-pill">Categories</a>
+      <a href="sell.html" class="nav-pill">Sell</a>
+      <a href="profile.html" class="nav-pill">Profile</a>
+    </nav>
+
+    <div class="header-actions">
+      <a href="wishlist.html" class="icon-btn sell-icon-btn wishlist-nav-icon" aria-label="Wishlist" style="text-decoration:none; position:relative;">
+        ♡<span class="wishlist-badge-shared">0</span>
+      </a>
+      <a href="cart.html" class="icon-btn sell-icon-btn cart-btn active" aria-label="Keranjang">
+        🛍️<span class="cart-badge" id="cartBadge">0</span>
+      </a>
+      <a href="profile.html" class="icon-btn sell-icon-btn" style="text-decoration:none; display:inline-flex; align-items:center;" aria-label="Profil Saya">👤</a>
+      <button class="login-btn sell-login-btn">Login</button>
+    </div>
+  </div>
+  <div class="sell-header-tear"></div>
+</header>
+
+<!-- ===== STEPPER ===== -->
+<section class="stepper-section">
+  <div class="stepper" id="stepper">
+    <div class="step-item" data-step="1">
+      <div class="step-circle">1</div>
+      <p class="step-label">Keranjang</p>
+      <p class="step-sublabel">Tinjau pesananmu</p>
+    </div>
+    <span class="step-connector"></span>
+
+    <div class="step-item" data-step="2">
+      <div class="step-circle">2</div>
+      <p class="step-label">Checkout</p>
+      <p class="step-sublabel">Alamat &amp; pembayaran</p>
+    </div>
+    <span class="step-connector"></span>
+
+    <div class="step-item" data-step="3">
+      <div class="step-circle">3</div>
+      <p class="step-label">Selesai</p>
+      <p class="step-sublabel">Pesanan dikonfirmasi</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== MAIN ===== -->
+<main class="cart-main">
+
+  <!-- ========== STEP 1: KERANJANG ========== -->
+  <section class="cart-step" id="cstep1" data-step-panel="1">
+    <h2 class="cart-title">Keranjang Belanja <span class="deco-inline">🛍️</span></h2>
+
+    <div class="cart-grid" id="cartGridWrap">
+      <div class="cart-items-col" id="cartItemsCol">
+        <!-- item keranjang dirender lewat JS -->
+      </div>
+
+      <aside class="cart-summary-card" id="cartSummaryCard">
+        <h3>Ringkasan Pesanan</h3>
+
+        <div class="promo-row">
+          <input type="text" id="promoInput" placeholder="Kode promo (contoh: SECONDLOVE)">
+          <button type="button" id="promoApplyBtn">Pakai</button>
+        </div>
+        <p class="promo-msg" id="promoMsg" hidden></p>
+
+        <div class="summary-line">
+          <span>Subtotal</span>
+          <span id="sumSubtotal">Rp 0</span>
+        </div>
+        <div class="summary-line" id="discountLine" hidden>
+          <span>Diskon promo</span>
+          <span id="sumDiscount">- Rp 0</span>
+        </div>
+        <div class="summary-line">
+          <span>Estimasi Ongkir</span>
+          <span id="sumShipping">Rp 0</span>
+        </div>
+        <hr class="summary-divider">
+        <div class="summary-line total">
+          <span>Total</span>
+          <span id="sumTotal">Rp 0</span>
+        </div>
+
+        <button type="button" class="btn btn-primary cart-checkout-btn" id="toCheckoutBtn">
+          Lanjut ke Checkout →
+        </button>
+        <a href="homepage.html" class="continue-shopping-link">← Lanjut belanja</a>
+      </aside>
+    </div>
+
+    <!-- tampil jika keranjang kosong -->
+    <div class="empty-cart" id="emptyCartState" hidden>
+      <span class="empty-cart-icon">🛍️</span>
+      <h3>Keranjang kamu masih kosong</h3>
+      <p>Yuk jelajahi barang-barang preloved pilihan dan temukan harta karunmu!</p>
+      <a href="homepage.html" class="btn btn-primary">Mulai Belanja</a>
+    </div>
+  </section>
+
+  <!-- ========== STEP 2: CHECKOUT ========== -->
+  <section class="cart-step" id="cstep2" data-step-panel="2" hidden>
+    <h2 class="cart-title">Checkout <span class="deco-inline">📦</span></h2>
+
+    <div class="cart-grid">
+      <form class="checkout-form-card" id="checkoutForm" novalidate>
+        <h3 class="form-title">Alamat Pengiriman</h3>
+
+        <label class="field-label" for="recvName">Nama Penerima <span class="req">*</span></label>
+        <input type="text" id="recvName" class="field-input" placeholder="Nama lengkap penerima" required>
+
+        <label class="field-label" for="recvPhone">No. HP <span class="req">*</span></label>
+        <input type="tel" id="recvPhone" class="field-input" placeholder="08xxxxxxxxxx" required>
+
+        <label class="field-label" for="recvAddress">Alamat Lengkap <span class="req">*</span></label>
+        <textarea id="recvAddress" class="field-textarea" placeholder="Nama jalan, nomor rumah, RT/RW, kelurahan, kecamatan..." required></textarea>
+
+        <div class="ktp-fields">
+          <div>
+            <label class="field-label" for="recvCity">Kota <span class="req">*</span></label>
+            <input type="text" id="recvCity" class="field-input" placeholder="Contoh: Surabaya" required>
+          </div>
+          <div>
+            <label class="field-label" for="recvPostal">Kode Pos <span class="req">*</span></label>
+            <input type="text" id="recvPostal" class="field-input" placeholder="60123" inputmode="numeric" maxlength="5" required>
+          </div>
+        </div>
+
+        <h3 class="form-title section-spacing">Metode Pengiriman</h3>
+        <div class="option-cards" id="shippingOptions">
+          <label class="option-card selected">
+            <input type="radio" name="shipping" value="reguler" data-cost="15000" checked>
+            <span class="option-title">Reguler</span>
+            <span class="option-sub">Estimasi 2-4 hari</span>
+            <span class="option-price">Rp 15.000</span>
+          </label>
+          <label class="option-card">
+            <input type="radio" name="shipping" value="express" data-cost="30000">
+            <span class="option-title">Express</span>
+            <span class="option-sub">Estimasi 1 hari</span>
+            <span class="option-price">Rp 30.000</span>
+          </label>
+        </div>
+
+        <h3 class="form-title section-spacing">Metode Pembayaran</h3>
+        <div class="option-cards" id="paymentOptions">
+          <label class="option-card selected">
+            <input type="radio" name="payment" value="transfer" checked>
+            <span class="option-title">🏦 Transfer Bank</span>
+            <span class="option-sub">BCA, BNI, Mandiri, BRI</span>
+          </label>
+          <label class="option-card">
+            <input type="radio" name="payment" value="ewallet">
+            <span class="option-title">📱 E-Wallet</span>
+            <span class="option-sub">OVO, GoPay, DANA</span>
+          </label>
+          <label class="option-card">
+            <input type="radio" name="payment" value="cod">
+            <span class="option-title">💵 COD</span>
+            <span class="option-sub">Bayar di tempat</span>
+          </label>
+        </div>
+
+        <div class="sell-actions">
+          <button type="button" class="btn btn-outline-dark" data-action="back-to-cart">← Kembali ke Keranjang</button>
+          <button type="submit" class="btn btn-primary">Bayar Sekarang →</button>
+        </div>
+      </form>
+
+      <aside class="cart-summary-card checkout-recap" id="checkoutRecap">
+        <h3>Ringkasan Pesanan</h3>
+        <div class="recap-items" id="recapItems"></div>
+        <hr class="summary-divider">
+        <div class="summary-line">
+          <span>Subtotal</span>
+          <span id="ckSubtotal">Rp 0</span>
+        </div>
+        <div class="summary-line" id="ckDiscountLine" hidden>
+          <span>Diskon promo</span>
+          <span id="ckDiscount">- Rp 0</span>
+        </div>
+        <div class="summary-line">
+          <span>Ongkir</span>
+          <span id="ckShipping">Rp 0</span>
+        </div>
+        <hr class="summary-divider">
+        <div class="summary-line total">
+          <span>Total Bayar</span>
+          <span id="ckTotal">Rp 0</span>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <!-- ========== STEP 3: SELESAI ========== -->
+  <section class="cart-step" id="cstep3" data-step-panel="3" hidden>
+    <div class="order-success-card">
+      <div class="washi washi-blue order-tape"></div>
+      <span class="deco cherry order-cherry">🍒</span>
+      <span class="deco sparkle order-star">✦</span>
+
+      <div class="success-check" id="orderCheck"><span>✓</span></div>
+
+      <h2 class="success-title">Pesanan Berhasil Dibuat! <span class="heart-outline">♡</span></h2>
+      <p class="success-desc">Terima kasih sudah berbelanja barang preloved di Second Stories.</p>
+
+      <div class="order-id-box">
+        <p>Nomor Pesanan</p>
+        <p class="order-id" id="orderIdText">#SS-000000</p>
+      </div>
+
+      <p class="success-banner" id="orderEtaText">Estimasi tiba: —</p>
+
+      <p class="next-title">Apa selanjutnya?</p>
+      <div class="next-steps">
+        <div class="next-item">
+          <span class="next-icon">📦</span>
+          <p>Penjual akan segera menyiapkan dan mengemas barangmu.</p>
+        </div>
+        <div class="next-item">
+          <span class="next-icon">🚚</span>
+          <p>Kamu akan menerima notifikasi saat pesanan dikirim.</p>
+        </div>
+        <div class="next-item">
+          <span class="next-icon">⭐</span>
+          <p>Jangan lupa beri ulasan setelah barang diterima ya!</p>
+        </div>
+      </div>
+
+      <div class="sell-actions centered">
+        <a href="profile.html?tab=orders" class="btn btn-outline-dark">Lihat Pesanan Saya</a>
+        <a href="homepage.html" class="btn btn-primary">Kembali ke Beranda</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ===== FOOTER ===== -->
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <a href="homepage.html" class="logo" style="color:#fff; text-decoration:none;">Second <span>Stories</span></a>
+      <p class="logo-sub">preloved, re-loved, re-happy</p>
+      <div class="socials">
+        <a href="#" aria-label="Instagram">◎</a>
+        <a href="#" aria-label="TikTok">♪</a>
+        <a href="#" aria-label="Facebook">f</a>
+      </div>
+    </div>
+
+    <div class="footer-col">
+      <h5>Navigasi</h5>
+      <a href="homepage.html">Home</a>
+      <a href="category.html">Categories</a>
+      <a href="sell.html">Sell</a>
+      <a href="profile.html">Profile</a>
+    </div>
+
+    <div class="footer-col">
+      <h5>Bantuan</h5>
+      <a href="#" data-info="faq">FAQ</a>
+      <a href="#" data-info="pengiriman">Pengiriman</a>
+      <a href="#" data-info="pembayaran">Pembayaran</a>
+      <a href="#" data-info="tnc">Syarat &amp; Ketentuan</a>
+    </div>
+
+    <div class="footer-col newsletter-col">
+      <h5>Newsletter</h5>
+      <p>Dapatkan update dan promo menarik setiap minggu!</p>
+      <form class="newsletter-form" id="cartNewsletterForm">
+        <input type="email" placeholder="Masukkan email kamu" required>
+        <button type="submit" aria-label="Kirim">➤</button>
+      </form>
+    </div>
+
+    <div class="footer-cherry">🍒</div>
+  </div>
+</footer>
+
+<script src="products-data.js"></script>
+<script src="cart_shared.js"></script>
+<script src="shared.js"></script>
+<script src="cart.js"></script>
+</body>
+</html>

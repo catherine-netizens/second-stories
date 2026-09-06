@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jual Barang — Second Stories</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://i.pinimg.com/736x/ff/b3/18/ffb3182d609b327f26fa3d64baee854e.jpg" rel="stylesheet">
+<link rel="stylesheet" href="homepage.css">
+<link rel="stylesheet" href="sell.css">
+<link rel="stylesheet" href="shared.css">
+</head>
+<body class="sell-page">
+
+<!-- ===== HEADER (varian gingham biru) ===== -->
+<header class="sell-header">
+  <div class="sell-header-inner">
+    <a href="homepage.html" class="logo-tag sell-logo-tag">
+      <div class="pin"></div>
+      <h1 class="logo">Second <span>Stories</span> <span class="tiny-heart">♡</span></h1>
+      <p class="logo-sub">preloved, re-loved, re-happy</p>
+    </a>
+
+    <nav class="main-nav">
+      <a href="homepage.html" class="nav-pill">Home</a>
+      <a href="category.html" class="nav-pill">Categories</a>
+      <a href="sell.html" class="nav-pill">Sell</a>
+      <a href="profile.html" class="nav-pill">Profile</a>
+    </nav>
+
+    <div class="header-actions">
+      <a href="wishlist.html" class="icon-btn sell-icon-btn wishlist-nav-icon" aria-label="Wishlist" style="text-decoration:none; position:relative;">
+        ♡<span class="wishlist-badge-shared">0</span>
+      </a>
+      <a href="cart.html" class="icon-btn sell-icon-btn cart-icon-link" aria-label="Keranjang" style="text-decoration:none; position:relative;">
+        🛍️<span class="cart-badge" id="cartBadge">0</span>
+      </a>
+      <button class="login-btn sell-login-btn">Login</button>
+    </div>
+  </div>
+  <div class="sell-header-tear"></div>
+</header>
+
+<!-- ===== HERO "JUAL BARANGMU" (hanya tampil di step 1) ===== -->
+<section class="sell-hero" id="sellHero">
+  <div class="sell-hero-inner">
+    <div class="sell-hero-copy">
+      <div class="sell-note-blue">
+        <span class="sell-note-face">🙂</span>
+        <p>Barang bekasmu bisa jadi berkah untuk orang lain.</p>
+      </div>
+
+      <h2 class="sell-hero-title">
+        <span class="deco sparkle-inline">✳</span> Jual Barangmu <span class="heart-outline">♡</span>
+      </h2>
+      <p class="sell-hero-desc">
+        Yuk, beri barangmu kesempatan kedua dan bantu orang lain menemukan harta karun baru!
+      </p>
+    </div>
+
+    <div class="sell-hero-photo-wrap">
+      <div class="washi washi-blue sell-photo-tape"></div>
+      <img src="https://picsum.photos/seed/sellhero2026/560/380" alt="Contoh barang preloved">
+      <span class="deco cherry sell-cherry-1">🍒</span>
+    </div>
+  </div>
+</section>
+
+<!-- ===== STEPPER ===== -->
+<section class="stepper-section">
+  <div class="stepper" id="stepper">
+    <div class="step-item" data-step="1">
+      <div class="step-circle">1</div>
+      <p class="step-label">Data Produk</p>
+      <p class="step-sublabel">Isi detail barang</p>
+    </div>
+    <span class="step-connector"></span>
+
+    <div class="step-item" data-step="2">
+      <div class="step-circle">2</div>
+      <p class="step-label">Syarat &amp; Ketentuan</p>
+      <p class="step-sublabel">Baca dan setujui syarat</p>
+    </div>
+    <span class="step-connector"></span>
+
+    <div class="step-item" data-step="3">
+      <div class="step-circle">3</div>
+      <p class="step-label">Preview</p>
+      <p class="step-sublabel">Cek kembali data</p>
+    </div>
+    <span class="step-connector"></span>
+
+    <div class="step-item" data-step="4">
+      <div class="step-circle">4</div>
+      <p class="step-label">Berhasil</p>
+      <p class="step-sublabel">Barang siap dipromosikan</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== MAIN WIZARD CONTENT ===== -->
+<main class="sell-main">
+
+  <!-- ========== STEP 1: DATA PRODUK ========== -->
+  <section class="sell-step" id="step1" data-step-panel="1">
+    <div class="sell-grid">
+
+      <form class="sell-form-card" id="dataProdukForm" novalidate>
+        <h3 class="form-title">Data Produk <span class="pencil-mark">✎</span></h3>
+
+        <label class="field-label" for="itemName">Nama Barang <span class="req">*</span></label>
+        <input type="text" id="itemName" class="field-input" placeholder="Contoh: Kamera Canon EOS 600D" required>
+
+        <label class="field-label" for="itemPrice">Harga Jual <span class="req">*</span></label>
+        <input type="number" id="itemPrice" class="field-input" placeholder="Contoh: 150000" min="1000" step="1000" required>
+        <p class="field-error" id="priceError" hidden>Masukkan harga jual yang valid ya.</p>
+
+        <label class="field-label" for="itemCategory">Kategori <span class="req">*</span></label>
+        <select id="itemCategory" class="field-select" required>
+          <option value="" disabled selected>Pilih kategori</option>
+          <option value="Fashion">Fashion</option>
+          <option value="Tas & Aksesoris">Tas & Aksesoris</option>
+          <option value="Elektronik">Elektronik</option>
+          <option value="Rumah Tangga">Rumah Tangga</option>
+          <option value="Hobi & Koleksi">Hobi & Koleksi</option>
+          <option value="Buku & Majalah">Buku & Majalah</option>
+        </select>
+
+        <label class="field-label">Kondisi Barang <span class="req">*</span></label>
+        <div class="condition-group" id="conditionGroup">
+          <button type="button" class="condition-btn" data-value="Sangat Baik">Sangat Baik</button>
+          <button type="button" class="condition-btn" data-value="Baik">Baik</button>
+          <button type="button" class="condition-btn" data-value="Cukup">Cukup</button>
+          <button type="button" class="condition-btn" data-value="Perlu Perbaikan">Perlu Perbaikan</button>
+        </div>
+        <p class="field-error" id="conditionError" hidden>Pilih salah satu kondisi barang ya.</p>
+
+        <label class="field-label" for="itemDesc">Deskripsi Barang <span class="req">*</span></label>
+        <textarea id="itemDesc" class="field-textarea" maxlength="500" placeholder="Jelaskan detail barang yang kamu jual...&#10;(merk, ukuran, warna, fungsi, kelengkapan, dll)" required></textarea>
+        <p class="char-counter"><span id="descCount">0</span> / 500</p>
+
+        <label class="field-label" for="ownership">Sudah Berapa Lama Dimiliki? <span class="req">*</span></label>
+        <select id="ownership" class="field-select" required>
+          <option value="" disabled selected>Pilih lama kepemilikan</option>
+          <option value="Kurang dari 6 bulan">Kurang dari 6 bulan</option>
+          <option value="6 bulan - 1 tahun">6 bulan - 1 tahun</option>
+          <option value="1 - 2 tahun">1 - 2 tahun</option>
+          <option value="Lebih dari 2 tahun">Lebih dari 2 tahun</option>
+        </select>
+
+        <label class="field-label" for="itemNote">Note (Additional)</label>
+        <textarea id="itemNote" class="field-textarea small" maxlength="300" placeholder="Tambahkan catatan lain (opsional)..."></textarea>
+        <p class="char-counter"><span id="noteCount">0</span> / 300</p>
+
+        <label class="field-label">Foto Barang <span class="req">*</span></label>
+        <div class="dropzone" id="dropzone">
+          <span class="dropzone-icon">⬆</span>
+          <p><span class="dropzone-link">Upload foto</span> barang</p>
+          <p class="dropzone-hint">Maks. 8 foto, ukuran maksimal 5MB per foto</p>
+          <p class="dropzone-hint">Format: JPG, PNG</p>
+          <input type="file" id="photoInput" accept="image/jpeg,image/png" multiple hidden>
+        </div>
+        <div class="photo-grid" id="photoGrid"></div>
+        <p class="field-error" id="photoError" hidden>Upload minimal 1 foto barang ya.</p>
+
+        <label class="field-label">Data Pribadi (KTP) <span class="req">*</span></label>
+        <div class="ktp-upload" id="ktpUpload">
+          <span class="ktp-icon">🪪</span>
+          <p><span class="dropzone-link">Upload foto KTP</span></p>
+          <p class="dropzone-hint">Pastikan data terlihat jelas</p>
+          <span class="ktp-lock">🔒</span>
+          <input type="file" id="ktpInput" accept="image/jpeg,image/png" hidden>
+        </div>
+        <div class="ktp-preview" id="ktpPreviewWrap" hidden>
+          <img id="ktpPreviewImg" alt="Preview KTP">
+          <button type="button" class="ktp-remove" id="ktpRemove">✕ Hapus</button>
+        </div>
+
+        <div class="ktp-fields">
+          <div>
+            <label class="field-label" for="ktpName">Nama Lengkap (sesuai KTP) <span class="req">*</span></label>
+            <input type="text" id="ktpName" class="field-input" placeholder="Contoh: Taylor Swift" required>
+          </div>
+          <div>
+            <label class="field-label" for="ktpNik">NIK <span class="req">*</span></label>
+            <input type="text" id="ktpNik" class="field-input" placeholder="16 digit NIK" maxlength="16" inputmode="numeric" required>
+          </div>
+        </div>
+
+        <label class="agree-check" id="agreeWrap">
+          <input type="checkbox" id="agreeCheck">
+          <span class="check-box-sell"></span>
+          Saya setuju dengan <a href="#" id="tncPeekLink">Syarat &amp; Ketentuan</a> yang berlaku <span class="req">*</span>
+        </label>
+
+        <div class="sell-actions">
+          <a href="homepage.html" class="btn btn-outline-dark">← Kembali</a>
+          <button type="submit" class="btn btn-primary">Lanjut ke Syarat &amp; Ketentuan →</button>
+        </div>
+      </form>
+
+      <aside class="sell-sidebar">
+        <div class="note-card note-pin">
+          <p class="note-title">Kenapa data pribadi dibutuhkan? <span class="pencil-mark">✎</span></p>
+          <p class="note-body">
+            Data pribadi tidak akan disebarkan dan hanya digunakan untuk keperluan
+            verifikasi identitas serta transaksi yang aman di Second Stories.
+          </p>
+          <p class="note-body">Kami menjaga privasi kamu dengan serius.</p>
+          <span class="note-heart">♥</span>
+        </div>
+
+        <div class="note-card note-blue-tips">
+          <div class="washi washi-blue tips-tape"></div>
+          <p class="note-title">Tips Jual Cepat! <span class="deco-inline">💰</span></p>
+          <ul class="tips-list">
+            <li><span class="tips-icon">📷</span> Ambil foto terang dari berbagai sisi</li>
+            <li><span class="tips-icon">✏️</span> Tulis deskripsi yang jujur dan detail</li>
+            <li><span class="tips-icon">🏷️</span> Harga yang wajar lebih cepat laku</li>
+            <li><span class="tips-icon">💬</span> Respon chat dengan cepat &amp; ramah</li>
+          </ul>
+          <span class="deco flower tips-flower">✿</span>
+        </div>
+
+        <div class="note-card note-nudge" id="agreeNudge">
+          <p>Centang dulu ya!<br>Wajib untuk melanjutkan <span class="heart-outline">♡</span></p>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <!-- ========== STEP 2: SYARAT & KETENTUAN ========== -->
+  <section class="sell-step" id="step2" data-step-panel="2" hidden>
+    <div class="tnc-card">
+      <h3 class="form-title">Syarat &amp; Ketentuan <span class="deco cherry tnc-cherry">🍒</span></h3>
+      <p class="tnc-subtitle">Harap baca dengan seksama sebelum melanjutkan.</p>
+
+      <ol class="tnc-list">
+        <li>
+          <h4>Data yang Benar</h4>
+          <p>Pastikan semua data barang yang kamu isi sudah benar dan lengkap. Kesalahan data dapat mempengaruhi proses verifikasi.</p>
+        </li>
+        <li>
+          <h4>Barang Layak Jual</h4>
+          <p>Barang yang dijual harus dalam kondisi baik, bersih, dan berfungsi dengan semestinya. Barang palsu, rusak berat, atau tidak layak jual akan ditolak.</p>
+        </li>
+        <li>
+          <h4>Foto Asli</h4>
+          <p>Gunakan foto asli barang yang kamu miliki. Foto harus jelas, tidak buram, dan menampilkan kondisi sebenarnya.</p>
+        </li>
+        <li>
+          <h4>Verifikasi &amp; Persetujuan</h4>
+          <p>Semua barang akan melalui proses verifikasi oleh tim Second Stories. Kami berhak menolak barang yang tidak sesuai dengan ketentuan. <span class="emoji-smile">🙂</span></p>
+        </li>
+        <li>
+          <h4>Privasi</h4>
+          <p>Data pribadimu akan dijaga kerahasiaannya dan hanya digunakan untuk keperluan verifikasi identitas dan transaksi yang aman di Second Stories.</p>
+        </li>
+      </ol>
+
+      <div class="washi washi-blue tnc-tape"></div>
+      <span class="deco sparkle tnc-star">✦</span>
+    </div>
+
+    <label class="agree-check tnc-agree" id="agreeWrap2">
+      <input type="checkbox" id="agreeCheck2">
+      <span class="check-box-sell"></span>
+      Saya setuju dengan Syarat &amp; Ketentuan yang berlaku <span class="req">*</span>
+    </label>
+
+    <div class="sell-actions centered">
+      <button type="button" class="btn btn-outline-dark" data-action="back-to-1">← Kembali</button>
+      <button type="button" class="btn btn-primary" id="toPreviewBtn" disabled>Lanjut ke Preview →</button>
+    </div>
+  </section>
+
+  <!-- ========== STEP 3: PREVIEW ========== -->
+  <section class="sell-step" id="step3" data-step-panel="3" hidden>
+    <div class="sell-grid preview-grid">
+      <div class="preview-card">
+        <h3 class="form-title">Preview</h3>
+        <p class="preview-banner">Cek kembali data barangmu sebelum dipromosikan.</p>
+
+        <div class="preview-block">
+          <p class="preview-block-title">📦 Data Produk</p>
+          <p class="preview-field-label">Nama Barang</p>
+          <p class="preview-field-value" id="pvName">—</p>
+
+          <p class="preview-field-label">Harga Jual</p>
+          <p class="preview-field-value" id="pvPrice">—</p>
+
+          <p class="preview-field-label">Kondisi Barang</p>
+          <p class="preview-field-value" id="pvCondition">—</p>
+
+          <p class="preview-field-label">Deskripsi Barang</p>
+          <p class="preview-field-value" id="pvDesc">—</p>
+
+          <p class="preview-field-label">Sudah Berapa Lama Dimiliki?</p>
+          <p class="preview-field-value" id="pvOwnership">—</p>
+
+          <p class="preview-field-label">Note (Additional)</p>
+          <p class="preview-field-value" id="pvNote">—</p>
+
+          <p class="preview-field-label">Foto Barang</p>
+          <div class="preview-photo-grid" id="pvPhotoGrid"></div>
+        </div>
+
+        <div class="preview-block">
+          <p class="preview-block-title">🪪 Data Pribadi (KTP)</p>
+          <div class="preview-ktp-row">
+            <div>
+              <p class="preview-field-label">Nama</p>
+              <p class="preview-field-value" id="pvKtpName">—</p>
+              <p class="preview-field-label">NIK</p>
+              <p class="preview-field-value" id="pvKtpNik">—</p>
+            </div>
+            <div class="preview-ktp-thumb-wrap">
+              <img id="pvKtpImg" class="preview-ktp-thumb" alt="Foto KTP">
+              <span class="ktp-lock small">🔒</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <aside class="sell-sidebar">
+        <div class="note-card note-blue-tips">
+          <div class="washi washi-blue tips-tape"></div>
+          <p class="note-title">Pastikan semua sudah benar ya! <span class="deco-inline">📌</span></p>
+          <ul class="check-list">
+            <li>✔ Data barang sudah lengkap</li>
+            <li>✔ Foto jelas dan sesuai</li>
+            <li>✔ Kondisi sesuai kenyataan</li>
+            <li>✔ Data pribadi sudah benar</li>
+          </ul>
+          <span class="note-heart blue-heart">♥</span>
+        </div>
+      </aside>
+    </div>
+
+    <div class="sell-actions centered">
+      <button type="button" class="btn btn-outline-dark" data-action="back-to-2">← Kembali</button>
+      <button type="button" class="btn btn-primary" id="submitBtn">Ya, Promosikan Barang Saya →</button>
+    </div>
+  </section>
+
+  <!-- ========== STEP 4: BERHASIL ========== -->
+  <section class="sell-step" id="step4" data-step-panel="4" hidden>
+    <div class="success-card">
+      <div class="washi washi-blue success-tape"></div>
+      <span class="deco cherry success-cherry-1">🍒</span>
+      <span class="deco sparkle success-star">✦</span>
+
+      <div class="success-check" id="successCheck">
+        <span>✓</span>
+      </div>
+
+      <h2 class="success-title">Yeay, Berhasil! <span class="heart-outline">♡</span></h2>
+      <p class="success-desc">Barangmu sudah berhasil dipromosikan di Second Stories.</p>
+
+      <p class="success-banner">Terima kasih telah menjadi bagian dari komunitas re-loved yang positif!</p>
+
+      <p class="next-title">Apa selanjutnya?</p>
+      <div class="next-steps">
+        <div class="next-item">
+          <span class="next-icon">📷</span>
+          <p>Tim kami akan melakukan verifikasi data dan foto barangmu.</p>
+        </div>
+        <div class="next-item">
+          <span class="next-icon">✉️</span>
+          <p>Kamu akan menerima notifikasi via email/chat setelah disetujui.</p>
+        </div>
+        <div class="next-item">
+          <span class="next-icon">📣</span>
+          <p>Jika disetujui, barangmu akan segera tayang di Second Stories!</p>
+        </div>
+      </div>
+
+      <div class="sell-actions centered">
+        <button type="button" class="btn btn-outline-dark" id="viewMyItemsBtn">Lihat Barang Saya</button>
+        <a href="homepage.html" class="btn btn-primary">Kembali ke Beranda</a>
+      </div>
+    </div>
+
+    <div class="note-card note-nudge success-note">
+      <p>Terus beri barangmu kehidupan kedua bersama Second Stories! <span class="heart-outline">♡</span></p>
+    </div>
+  </section>
+
+</main>
+
+<!-- ===== FOOTER (reuse gaya maroon dari homepage) ===== -->
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <a href="homepage.html" class="logo" style="color:#fff; text-decoration:none;">Second <span>Stories</span></a>
+      <p class="logo-sub">preloved, re-loved, re-happy</p>
+      <div class="socials">
+        <a href="#" aria-label="Instagram">◎</a>
+        <a href="#" aria-label="TikTok">♪</a>
+        <a href="#" aria-label="Facebook">f</a>
+      </div>
+    </div>
+
+    <div class="footer-col">
+      <h5>Navigasi</h5>
+      <a href="homepage.html">Home</a>
+      <a href="category.html">Categories</a>
+      <a href="sell.html">Sell</a>
+      <a href="profile.html">Profile</a>
+    </div>
+
+    <div class="footer-col">
+      <h5>Bantuan</h5>
+      <a href="#" data-info="faq">FAQ</a>
+      <a href="#" data-info="pengiriman">Pengiriman</a>
+      <a href="#" data-info="pembayaran">Pembayaran</a>
+      <a href="#" data-info="tnc">Syarat &amp; Ketentuan</a>
+    </div>
+
+    <div class="footer-col newsletter-col">
+      <h5>Newsletter</h5>
+      <p>Dapatkan update dan promo menarik setiap minggu!</p>
+      <form class="newsletter-form" id="sellNewsletterForm">
+        <input type="email" placeholder="Masukkan email kamu" required>
+        <button type="submit" aria-label="Kirim">➤</button>
+      </form>
+    </div>
+
+    <div class="footer-cherry">🍒</div>
+  </div>
+</footer>
+
+<script src="products-data.js"></script>
+<script src="cart_shared.js"></script>
+<script src="shared.js"></script>
+<script src="sell.js"></script>
+</body>
+</html>

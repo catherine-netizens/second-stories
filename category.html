@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Categories — Second Stories</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Caveat:wght@600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="homepage.css">
+<link rel="stylesheet" href="shared.css">
+<link rel="stylesheet" href="category.css">
+</head>
+<body class="categories-page">
+
+<!-- ===== HEADER (varian biru untuk halaman Categories) ===== -->
+<header class="cat-header">
+  <div class="cat-header-inner">
+    <a href="homepage.html" class="logo-tag cat-logo-tag">
+      <div class="pin"></div>
+      <h1 class="logo">Second <span>Stories</span></h1>
+      <p class="logo-sub">preloved, re-loved, re-happy <span class="cherry-inline">🍒</span></p>
+    </a>
+
+    <nav class="main-nav cat-nav">
+      <a href="homepage.html" class="nav-pill cat-pill">Home</a>
+      <a href="category.html" class="nav-pill cat-pill cat-pill-active">Categories</a>
+      <a href="sell.html" class="nav-pill cat-pill">Sell</a>
+      <a href="profile.html" class="nav-pill">Profile</a>
+    </nav>
+
+    <div class="header-actions">
+      <a href="wishlist.html" class="icon-btn cat-icon-btn wishlist-nav-icon" id="wishlistNavBtn" aria-label="Wishlist" style="text-decoration:none; position:relative;">
+        ♡<span class="wishlist-badge-shared">0</span>
+      </a>
+      <a href="cart.html" class="icon-btn cat-icon-btn cart-icon-link" aria-label="Keranjang" style="text-decoration:none; position:relative;">
+        🛍️<span class="cart-badge" id="cartBadge">0</span>
+      </a>
+      <a href="profile.html" class="icon-btn cat-icon-btn" style="text-decoration:none; display:inline-flex; align-items:center;" aria-label="Profil Saya">👤</a>
+      <button class="login-btn cat-login-btn">Login</button>
+    </div>
+  </div>
+</header>
+
+<!-- ===== HERO ===== -->
+<section class="cat-hero">
+  <div class="hero-grid-bg"></div>
+  <span class="deco cherry cat-cherry-1">🍒</span>
+  <span class="deco sparkle cat-sparkle-1">✦</span>
+  <span class="deco sparkle cat-sparkle-2">✦</span>
+
+  <div class="cat-hero-inner">
+    <div class="cat-title-card">
+      <div class="washi washi-blue cat-title-tape"></div>
+      <h2 class="cat-title">Categories</h2>
+      <p class="cat-subtitle">
+        Temukan barang bekas berkualitas dari berbagai kategori.<br>
+        Pilih favoritmu dan beri mereka <span class="squiggle-underline">kehidupan baru!</span>
+      </p>
+    </div>
+
+    <div class="cat-note">
+      <div class="washi washi-blue cat-note-tape"></div>
+      <p>Good for you,<br>good for earth. ♡</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SEARCH BAR ===== -->
+<section class="cat-search-section">
+  <div class="cat-search-box">
+    <input type="text" id="catSearchInput" placeholder="Cari barang atau kategori...">
+    <button class="cat-search-btn" id="catSearchBtn" aria-label="Cari">🔍</button>
+  </div>
+</section>
+
+<!-- ===== MAIN: FILTER + GRID ===== -->
+<section class="cat-main">
+
+  <!-- FILTER SIDEBAR -->
+  <aside class="cat-filter">
+    <div class="filter-pin"></div>
+    <h3 class="filter-title"><span class="tiny-dash">✒</span> Filter <span class="tiny-dash">✒</span></h3>
+
+    <div class="filter-group">
+      <p class="filter-label">Kategori</p>
+      <label class="filter-check">
+        <input type="checkbox" id="catAll" checked>
+        <span class="check-box"></span>
+        <span>Semua</span>
+      </label>
+      <label class="filter-check">
+        <input type="checkbox" class="cat-filter-item" value="Fashion">
+        <span class="check-box"></span>
+        <span>👗 Fashion</span>
+      </label>
+      <label class="filter-check">
+        <input type="checkbox" class="cat-filter-item" value="Tas & Aksesoris">
+        <span class="check-box"></span>
+        <span>👜 Tas &amp; Aksesoris</span>
+      </label>
+      <label class="filter-check">
+        <input type="checkbox" class="cat-filter-item" value="Elektronik">
+        <span class="check-box"></span>
+        <span>📷 Elektronik</span>
+      </label>
+      <label class="filter-check">
+        <input type="checkbox" class="cat-filter-item" value="Rumah Tangga">
+        <span class="check-box"></span>
+        <span>💡 Rumah Tangga</span>
+      </label>
+      <label class="filter-check">
+        <input type="checkbox" class="cat-filter-item" value="Hobi & Koleksi">
+        <span class="check-box"></span>
+        <span>📸 Hobi &amp; Koleksi</span>
+      </label>
+      <label class="filter-check">
+        <input type="checkbox" class="cat-filter-item" value="Buku & Majalah">
+        <span class="check-box"></span>
+        <span>📖 Buku &amp; Majalah</span>
+      </label>
+    </div>
+
+    <hr class="filter-divider">
+
+    <div class="filter-group">
+      <p class="filter-label">Kondisi</p>
+      <label class="filter-check">
+        <input type="checkbox" class="cond-filter-item" value="Sangat Baik">
+        <span class="check-box"></span>
+        <span>Sangat Baik</span>
+      </label>
+      <label class="filter-check">
+        <input type="checkbox" class="cond-filter-item" value="Baik">
+        <span class="check-box"></span>
+        <span>Baik</span>
+      </label>
+      <label class="filter-check">
+        <input type="checkbox" class="cond-filter-item" value="Cukup">
+        <span class="check-box"></span>
+        <span>Cukup</span>
+      </label>
+      <label class="filter-check">
+        <input type="checkbox" class="cond-filter-item" value="Perlu Perbaikan">
+        <span class="check-box"></span>
+        <span>Perlu Perbaikan</span>
+      </label>
+    </div>
+
+    <hr class="filter-divider">
+
+    <div class="filter-group">
+      <p class="filter-label">Rentang Harga</p>
+      <input type="range" id="priceRange" min="0" max="3000000" step="25000" value="3000000" class="price-slider">
+      <div class="price-labels">
+        <span>Rp 0</span>
+        <span id="priceMaxLabel">Rp 3.000.000+</span>
+      </div>
+    </div>
+
+    <button class="btn-reset" id="resetFilterBtn">Reset Filter ↻</button>
+  </aside>
+
+  <div class="cat-results-col">
+    <!-- QUICK BROWSE: tile kategori (klik untuk filter cepat) -->
+    <div class="cat-grid" id="catGrid">
+      <button type="button" class="cat-card cream-card" data-name="Fashion">
+        <div class="washi washi-blue cc-tape"></div>
+        <span class="cc-heart">♡</span>
+        <span class="cc-note">thrifted fits! ✦</span>
+        <img src="https://i.pinimg.com/736x/87/b7/c6/87b7c659b2a539c632a23e300c7fbfb2.jpg" alt="Fashion">
+        <span class="cc-star">✧</span>
+        <div class="cc-label">
+          <span>Fashion</span>
+          <span class="cc-arrow">›</span>
+        </div>
+      </button>
+
+      <button type="button" class="cat-card blue-card" data-name="Tas & Aksesoris">
+        <div class="washi cc-tape-red"></div>
+        <span class="cc-note cc-note-dark">preloved for new memories ♡</span>
+        <img src="https://i.pinimg.com/736x/d2/ff/99/d2ff99949f8f068b2e14257de445b72e.jpg" alt="Tas & Aksesoris">
+        <div class="cc-label">
+          <span>Tas &amp; Aksesoris</span>
+          <span class="cc-arrow">›</span>
+        </div>
+      </button>
+
+      <button type="button" class="cat-card cream-card" data-name="Elektronik">
+        <span class="cc-cherry">🍒</span>
+        <span class="cc-note">gadget kedua kesempatan!</span>
+        <img src="https://i.pinimg.com/1200x/62/78/fc/6278fcfe1d1c4893b78a8c54e3272b55.jpg" alt="Elektronik">
+        <div class="cc-label">
+          <span>Elektronik</span>
+          <span class="cc-arrow">›</span>
+        </div>
+      </button>
+
+      <button type="button" class="cat-card blue-card" data-name="Rumah Tangga">
+        <div class="washi cc-tape-small"></div>
+        <span class="cc-note cc-note-dark">betah di rumah ♡</span>
+        <img src="https://i.pinimg.com/1200x/f7/65/fb/f765fb6238906addf5d3325a94f5e16e.jpg" alt="Rumah Tangga">
+        <span class="cc-heart cc-heart-dark">♡</span>
+        <span class="cc-sparkle">✧</span>
+        <div class="cc-label">
+          <span>Rumah Tangga</span>
+          <span class="cc-arrow">›</span>
+        </div>
+      </button>
+
+      <button type="button" class="cat-card cream-card" data-name="Hobi & Koleksi">
+        <div class="washi washi-blue cc-tape"></div>
+        <span class="cc-note">koleksi seru buat kamu 📸</span>
+        <img src="https://i.pinimg.com/736x/78/2e/11/782e11a64c61d780b10811d9149b1bf4.jpg" alt="Hobi & Koleksi">
+        <span class="cc-heart">♡</span>
+        <div class="cc-label">
+          <span>Hobi &amp; Koleksi</span>
+          <span class="cc-arrow">›</span>
+        </div>
+      </button>
+
+      <button type="button" class="cat-card blue-card" data-name="Buku & Majalah">
+        <div class="washi cc-tape-red"></div>
+        <span class="cc-note cc-note-dark">baca lagi, baca terus 📖</span>
+        <img src="https://i.pinimg.com/736x/36/5f/5f/365f5f940e59eb6ceac37cbc44fae963.jpg" alt="Buku & Majalah">
+        <div class="cc-label">
+          <span>Buku &amp; Majalah</span>
+          <span class="cc-arrow">›</span>
+        </div>
+      </button>
+    </div>
+
+    <!-- PRODUCT LISTING -->
+    <div class="cat-listing-head">
+      <h3 id="catResultTitle">Semua Produk</h3>
+      <select class="sort-select" id="catSortSelect">
+        <option value="terbaru">Terbaru</option>
+        <option value="termurah">Harga Terendah</option>
+        <option value="termahal">Harga Tertinggi</option>
+        <option value="terlaris">Terlaris</option>
+      </select>
+    </div>
+
+    <div class="cat-product-grid" id="catProductGrid"></div>
+
+    <p class="cat-empty-msg" id="catEmptyMsg" hidden>Tidak ada produk yang cocok dengan filter kamu. Coba reset filter, yuk!</p>
+  </div>
+</section>
+
+<!-- ===== FOOTER (varian biru) ===== -->
+<footer class="cat-footer">
+  <div class="cat-footer-pattern"></div>
+  <div class="footer-inner cat-footer-inner">
+    <div class="footer-brand">
+      <a href="homepage.html" class="logo cat-footer-logo">Second <span>Stories</span></a>
+      <p class="logo-sub">preloved, re-loved, re-happy</p>
+      <div class="socials cat-socials">
+        <a href="#" aria-label="Instagram">◎</a>
+        <a href="#" aria-label="TikTok">♪</a>
+        <a href="#" aria-label="Pinterest">📌</a>
+        <a href="#" aria-label="X">✕</a>
+      </div>
+    </div>
+
+    <div class="footer-col">
+      <h5>Navigasi</h5>
+      <a href="homepage.html">Home</a>
+      <a href="category.html">Categories</a>
+      <a href="sell.html">Sell</a>
+      <a href="profile.html">Profile</a>
+    </div>
+
+    <div class="footer-col">
+      <h5>Bantuan</h5>
+      <a href="#" data-info="faq">FAQ</a>
+      <a href="#" data-info="pengiriman">Pengiriman</a>
+      <a href="#" data-info="pembayaran">Pembayaran</a>
+      <a href="#" data-info="tnc">Syarat &amp; Ketentuan</a>
+    </div>
+
+    <div class="footer-col newsletter-col">
+      <h5>Newsletter</h5>
+      <p>Dapatkan update barang terbaru dan promo menarik!</p>
+      <form class="newsletter-form cat-newsletter-form" id="catNewsletterForm">
+        <input type="email" placeholder="Masukkan email kamu" required>
+        <button type="submit" aria-label="Kirim">➤</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="cat-footer-note">
+    <p>Less waste,<br>more stories ♡</p>
+  </div>
+  <span class="deco cherry cat-footer-cherry">🍒</span>
+</footer>
+
+<script src="products-data.js"></script>
+<script src="cart_shared.js"></script>
+<script src="shared.js"></script>
+<script src="category.js"></script>
+</body>
+</html>

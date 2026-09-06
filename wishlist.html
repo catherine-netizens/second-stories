@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wishlist Saya — Second Stories</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Caveat:wght@600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="homepage.css">
+<link rel="stylesheet" href="cart.css">
+<link rel="stylesheet" href="shared.css">
+<link rel="stylesheet" href="wishlist.css">
+</head>
+<body class="wishlist-page">
+
+<!-- ===== HEADER ===== -->
+<header class="site-header">
+  <div class="header-inner">
+    <a href="homepage.html" class="logo-tag" style="text-decoration:none;">
+      <div class="pin"></div>
+      <h1 class="logo">Second <span>Stories</span></h1>
+      <p class="logo-sub">preloved, re-loved, re-happy <span class="cherry-inline">🍒</span></p>
+    </a>
+
+    <nav class="main-nav">
+      <a href="homepage.html" class="nav-pill">Home</a>
+      <a href="category.html" class="nav-pill">Categories</a>
+      <a href="sell.html" class="nav-pill">Sell</a>
+      <a href="profile.html" class="nav-pill">Profile</a>
+    </nav>
+
+    <div class="header-actions">
+      <a href="wishlist.html" class="icon-btn wishlist-nav-icon active" aria-label="Wishlist" style="text-decoration:none; position:relative;">
+        ♥<span class="wishlist-badge-shared">0</span>
+      </a>
+      <a href="cart.html" class="icon-btn cart-icon-link" aria-label="Keranjang">
+        🛍️<span class="cart-badge" id="cartBadge">0</span>
+      </a>
+      <a href="profile.html" class="icon-btn" style="text-decoration:none; display:inline-flex; align-items:center;" aria-label="Profil Saya">👤</a>
+      <button class="login-btn">Login</button>
+    </div>
+  </div>
+</header>
+
+<section class="wl-hero">
+  <h2>Wishlist Saya <span class="heart-outline">♡</span></h2>
+  <p>Barang-barang yang kamu suka, kumpulkan di sini dulu sebelum checkout.</p>
+</section>
+
+<main class="wl-main">
+  <div class="wl-grid" id="wlGrid"></div>
+
+  <div class="empty-cart" id="wlEmptyState" hidden>
+    <span class="empty-cart-icon">♡</span>
+    <h3>Wishlist kamu masih kosong</h3>
+    <p>Tap ikon ♡ di produk favoritmu supaya gampang ditemukan lagi nanti.</p>
+    <a href="category.html" class="btn btn-primary">Jelajahi Produk</a>
+  </div>
+</main>
+
+<!-- ===== FOOTER ===== -->
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <a href="homepage.html" class="logo" style="color:#fff; text-decoration:none;">Second <span>Stories</span></a>
+      <p class="logo-sub">preloved, re-loved, re-happy</p>
+      <div class="socials">
+        <a href="#" aria-label="Instagram">◎</a>
+        <a href="#" aria-label="TikTok">♪</a>
+        <a href="#" aria-label="Facebook">f</a>
+      </div>
+    </div>
+
+    <div class="footer-col">
+      <h5>Navigasi</h5>
+      <a href="homepage.html">Home</a>
+      <a href="category.html">Categories</a>
+      <a href="sell.html">Sell</a>
+      <a href="profile.html">Profile</a>
+    </div>
+
+    <div class="footer-col">
+      <h5>Bantuan</h5>
+      <a href="#" data-info="faq">FAQ</a>
+      <a href="#" data-info="pengiriman">Pengiriman</a>
+      <a href="#" data-info="pembayaran">Pembayaran</a>
+      <a href="#" data-info="tnc">Syarat &amp; Ketentuan</a>
+    </div>
+
+    <div class="footer-col newsletter-col">
+      <h5>Newsletter</h5>
+      <p>Dapatkan update dan promo menarik setiap minggu!</p>
+      <form class="newsletter-form" id="wlNewsletterForm">
+        <input type="email" placeholder="Masukkan email kamu" required>
+        <button type="submit" aria-label="Kirim">→</button>
+      </form>
+    </div>
+
+    <div class="footer-cherry">🍒</div>
+  </div>
+</footer>
+
+<script src="products-data.js"></script>
+<script src="cart_shared.js"></script>
+<script src="shared.js"></script>
+<script src="wishlist.js"></script>
+</body>
+</html>

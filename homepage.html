@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Second Stories — Preloved, Re-loved, Re-happy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Caveat:wght@600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="homepage.css">
+<link rel="stylesheet" href="shared.css">
+</head>
+<body>
+
+<!-- ===== ANIMATED BACKGROUND LAYERS ===== -->
+<div class="blob-bg" aria-hidden="true">
+  <span class="blob blob-1"></span>
+  <span class="blob blob-2"></span>
+  <span class="blob blob-3"></span>
+  <span class="blob blob-4"></span>
+</div>
+<div class="bg-animation" id="bgAnimation" aria-hidden="true"></div>
+
+<!-- ===== HEADER ===== -->
+<header class="site-header">
+  <div class="header-inner">
+    <div class="logo-tag">
+      <div class="pin"></div>
+      <h1 class="logo">Second <span>Stories</span></h1>
+      <p class="logo-sub">preloved, re-loved, re-happy <span class="cherry-inline">🍒</span></p>
+    </div>
+
+    <nav class="main-nav">
+      <a href="homepage.html" class="nav-pill active">Home</a>
+      <a href="category.html" class="nav-pill">Categories</a>
+      <a href="sell.html" class="nav-pill">Sell</a>
+      <a href="profile.html" class="nav-pill">Profile</a>
+    </nav>
+
+    <div class="header-actions">
+      <a href="wishlist.html" class="icon-btn wishlist-nav-icon" id="wishlistNavBtn" aria-label="Wishlist" style="text-decoration:none; position:relative;">
+        ♡<span class="wishlist-badge-shared">0</span>
+      </a>
+      <a href="cart.html" class="icon-btn cart-icon-link" aria-label="Keranjang">
+        🛍️<span class="cart-badge" id="cartBadge">0</span>
+      </a>
+      <a href="profile.html" class="icon-btn" style="text-decoration:none; display:inline-flex; align-items:center;" aria-label="Profil Saya">👤</a>
+      <button class="login-btn">Login</button>
+    </div>
+  </div>
+</header>
+
+<!-- ===== HERO ===== -->
+<section class="hero">
+  <div class="hero-grid-bg"></div>
+  <span class="deco sparkle sparkle-1">✦</span>
+  <span class="deco flower flower-1">✿</span>
+  <span class="deco cherry cherry-1">🍒</span>
+
+  <div class="hero-inner">
+    <div class="hero-copy reveal reveal-left">
+      <h2 class="hero-title">
+        Good Things<br>
+        Deserve a<br>
+        <span class="script">Second Chance</span>
+      </h2>
+      <p class="hero-desc">
+        Temukan barang bekas berkualitas dengan harga terbaik.
+        Jual barangmu, beri nilai baru, dan bantu bumi lebih baik.
+      </p>
+      <div class="hero-buttons">
+        <a href="category.html" class="btn btn-primary">Belanja Sekarang</a>
+        <a href="sell.html" class="btn btn-secondary">Jual Barang</a>
+      </div>
+    </div>
+
+    <div class="hero-photo-wrap reveal reveal-right">
+      <div class="washi washi-blue"></div>
+      <div class="polaroid">
+        <img src="https://i.pinimg.com/736x/00/d6/8a/00d68a471e76e0597d5d893c5bc8c02a.jpg" alt="Vintage preloved items">
+        <p class="polaroid-caption">Preloved is<br>the new love.</p>
+      </div>
+      <div class="heart-badge">♥</div>
+      <div class="sticky-note">
+        <p>Love items</p>
+        <p>Lower price</p>
+        <p>Less waste</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SHOP BY CATEGORY ===== -->
+<section class="category-section" id="categories">
+  <span class="deco cherry cherry-2">🍒</span>
+  <div class="category-inner">
+    <div class="category-head reveal">
+      <h3><span class="tiny-star">✧</span> Shop by Category <span class="tiny-star">✧</span></h3>
+      <a href="category.html" class="btn btn-outline-dark">Lihat Semua →</a>
+    </div>
+
+    <div class="category-grid">
+      <button class="category-card reveal" data-cat="Fashion">
+        <span class="cat-icon-frame">👗</span>
+        <span class="cat-label">Fashion</span>
+      </button>
+      <button class="category-card reveal" data-cat="Tas &amp; Aksesoris">
+        <span class="cat-icon-frame">👜</span>
+        <span class="cat-label">Tas &amp; Aksesoris</span>
+      </button>
+      <button class="category-card reveal" data-cat="Elektronik">
+        <span class="cat-icon-frame">📷</span>
+        <span class="cat-label">Elektronik</span>
+      </button>
+      <button class="category-card reveal" data-cat="Rumah Tangga">
+        <span class="cat-icon-frame">💡</span>
+        <span class="cat-label">Rumah Tangga</span>
+      </button>
+      <button class="category-card reveal" data-cat="Hobi &amp; Koleksi">
+        <span class="cat-icon-frame">📸</span>
+        <span class="cat-label">Hobi &amp; Koleksi</span>
+      </button>
+      <button class="category-card reveal" data-cat="Buku &amp; Majalah">
+        <span class="cat-icon-frame">📖</span>
+        <span class="cat-label">Buku &amp; Majalah</span>
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- ===== PRODUCT CAROUSEL ===== -->
+<section class="product-section">
+  <h3 class="product-title reveal">✳ Pilihan Terbaik untuk Kamu <span class="pink-icon">💗</span></h3>
+
+  <div class="carousel-wrap">
+    <button class="carousel-arrow left" id="prevBtn" aria-label="Sebelumnya">‹</button>
+
+    <div class="carousel-track" id="carouselTrack">
+      <!-- product cards injected by JS -->
+    </div>
+
+    <button class="carousel-arrow right" id="nextBtn" aria-label="Berikutnya">›</button>
+  </div>
+
+  <div class="product-cta">
+    <a href="category.html" class="btn btn-primary">Lihat Semua Barang</a>
+  </div>
+  <span class="deco cherry cherry-3">🍒</span>
+</section>
+
+<!-- ===== Sell ===== -->
+<section class="how-section" id="how">
+  <span class="deco cherry cherry-4">🍒</span>
+  <div class="washi washi-pink-diag"></div>
+  <h3 class="how-title reveal">Gimana Cara Kerjanya? <span class="pencil">✎</span> <span class="heart-outline">♡</span></h3>
+
+  <div class="how-steps">
+    <div class="how-card reveal">
+      <div class="how-number">1</div>
+      <div class="how-icon">🛒</div>
+      <h4>Pilih Barang</h4>
+      <p>Temukan barang bekas impianmu dengan mudah.</p>
+    </div>
+    <span class="how-arrow">⤍</span>
+    <div class="how-card reveal">
+      <div class="how-number">2</div>
+      <div class="how-icon">💬</div>
+      <h4>Chat &amp; Deal</h4>
+      <p>Hubungi penjual dan nego harga terbaik.</p>
+    </div>
+    <span class="how-arrow">⤍</span>
+    <div class="how-card reveal">
+      <div class="how-number">3</div>
+      <div class="how-icon">📦</div>
+      <h4>Bayar &amp; Kirim</h4>
+      <p>Lakukan pembayaran aman dan barang dikirim.</p>
+    </div>
+    <span class="how-arrow">⤍</span>
+    <div class="how-card reveal">
+      <div class="how-number">4</div>
+      <div class="how-icon">❤</div>
+      <h4>Barang Sampai!</h4>
+      <p>Terima barang dan beri ulasan, yuk!</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== COMMUNITY ===== -->
+<section class="community-section" id="about">
+  <div class="community-inner">
+    <div class="community-copy reveal reveal-left">
+      <h3>Jadi Bagian dari Komunitas<br>#SecondStories</h3>
+      <p>Bersama kita bisa belanja hemat,<br>jualan mudah, dan bumi pun senang!</p>
+      <button class="btn btn-primary" id="joinCommunityBtn">Gabung Sekarang</button>
+    </div>
+
+    <div class="community-photos reveal reveal-right">
+      <div class="washi washi-blue small"></div>
+      <img class="c-photo c-photo-1" src="https://picsum.photos/seed/thriftshelf/260/230" alt="Komunitas preloved">
+      <img class="c-photo c-photo-2" src="https://picsum.photos/seed/flowerjars/260/230" alt="Komunitas preloved">
+      <div class="sticky-note note-slant">
+        <p>small choices</p>
+        <p>big impact</p>
+        <span class="heart-outline small-heart">♡</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <h4 class="logo">Second <span>Stories</span></h4>
+      <p class="logo-sub">preloved, re-loved, re-happy</p>
+      <div class="socials">
+        <a href="#" aria-label="Instagram">◎</a>
+        <a href="#" aria-label="TikTok">♪</a>
+        <a href="#" aria-label="Facebook">f</a>
+      </div>
+    </div>
+
+    <div class="footer-col">
+      <h5>Navigasi</h5>
+      <a href="category.html">Categories</a>
+      <a href="sell.html">Sell</a>
+      <a href="profile.html">Profile</a>
+      <a href="#" data-info="contact">Contact</a>
+    </div>
+
+    <div class="footer-col">
+      <h5>Bantuan</h5>
+      <a href="#" data-info="faq">FAQ</a>
+      <a href="#" data-info="pengiriman">Pengiriman</a>
+      <a href="#" data-info="pembayaran">Pembayaran</a>
+      <a href="#" data-info="tnc">Syarat &amp; Ketentuan</a>
+    </div>
+
+    <div class="footer-col newsletter-col">
+      <h5>Newsletter</h5>
+      <p>Dapatkan update dan promo menarik setiap minggu!</p>
+      <form class="newsletter-form" id="newsletterForm">
+        <input type="email" placeholder="Masukkan email kamu" required>
+        <button type="submit" aria-label="Kirim">→</button>
+      </form>
+    </div>
+
+    <div class="footer-cherry">🍒</div>
+  </div>
+</footer>
+
+<script src="products-data.js"></script>
+<script src="cart_shared.js"></script>
+<script src="shared.js"></script>
+<script src="homepage.js"></script>
+</body>
+</html>

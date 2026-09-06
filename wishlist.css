@@ -1,0 +1,29 @@
+/* ===== WISHLIST PAGE ===== */
+body.wishlist-page { background: var(--cream); }
+
+.wl-hero {
+  max-width: 1200px;
+  margin: 30px auto 0;
+  padding: 0 4%;
+}
+.wl-hero h2 { font-size: 2.2rem; color: var(--maroon); margin-bottom: 8px; }
+.wl-hero p { color: var(--ink-soft); }
+
+.wl-main {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px 4% 70px;
+}
+
+.wl-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  gap: 22px;
+}
+.wl-grid[hidden] { display: none; }
+.wl-grid .product-card { min-width: 0; max-width: none; transform: none !important; }
+
+/* Shared e-commerce interaction polish */
+button,.btn,a.nav-pill,.option-card,.condition-btn,.cat-card,.product-card{transition:transform .18s ease,box-shadow .18s ease,background-color .18s ease,opacity .18s ease;}
+button:not(:disabled):active,.btn:not(:disabled):active{transform:translateY(1px) scale(.98);}
+button:disabled{cursor:not-allowed;}
