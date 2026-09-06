@@ -1,3 +1,4 @@
+```javascript
 // ===== SECOND STORIES SHARED =====
 
 const SSToast = {
@@ -20,7 +21,6 @@ const SSToast = {
 
     setTimeout(() => {
       toast.classList.remove("show");
-
       setTimeout(() => toast.remove(), 300);
     }, 2600);
   }
@@ -29,9 +29,11 @@ const SSToast = {
 
 // ===== API HELPER =====
 
+const API_BASE = "https://second-stories-production.up.railway.app";
+
 async function apiJSON(url, options = {}) {
-  const response = await fetch(url, {
-    credentials: "same-origin",
+  const response = await fetch(API_BASE + url, {
+    credentials: "include",
     ...options
   });
 
@@ -43,7 +45,7 @@ async function apiJSON(url, options = {}) {
     data = JSON.parse(text);
   } catch {
     throw new Error(
-      `Server mengembalikan respons bukan JSON (${response.status}). Pastikan website dibuka dari http://localhost:3000.`
+      `Server mengembalikan respons bukan JSON (${response.status}).`
     );
   }
 
@@ -319,12 +321,13 @@ const SSAuth = {
         modeName === "register";
 
       nameLabel.hidden = !isRegister;
-nameInput.hidden = !isRegister;
+      nameInput.hidden = !isRegister;
 
-nameLabel.style.display = isRegister ? "" : "none";
-nameInput.style.display = isRegister ? "" : "none";
+      nameLabel.style.display = isRegister ? "" : "none";
+      nameInput.style.display = isRegister ? "" : "none";
 
-nameInput.required = isRegister;
+      nameInput.required = isRegister;
+
       title.innerHTML = isRegister
         ? "Buat Akun Baru <span>✧</span>"
         : "Selamat Datang Kembali <span>♡</span>";
@@ -946,3 +949,4 @@ document.addEventListener(
       });
   }
 );
+```
