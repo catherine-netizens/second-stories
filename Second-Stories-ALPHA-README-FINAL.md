@@ -106,10 +106,10 @@ Pengguna juga dapat berperan sebagai seller dengan mengunggah barang miliknya se
 
 ## Live Demo
 
-Website saat ini dijalankan menggunakan local development server.
+
 
 ```text
-http://localhost:3000
+https://gorgeous-seahorse-3f0526.netlify.app/homepage
 ```
 
 ## Screenshot Aplikasi
