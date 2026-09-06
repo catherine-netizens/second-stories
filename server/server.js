@@ -592,22 +592,7 @@ function mapProduct(p) {
 
     gallery: gallery,
 
-   seller: {
-  id: Number(
-    p.seller_id
-  ),
-
-  name:
-    p.seller_name ||
-    "",
-
-  avatar:
-    (
-      typeof p.seller_avatar === "string" &&
-      p.seller_avatar.startsWith("data:image/")
-    )
-      ? `https://i.pravatar.cc/150?img=${(Number(p.seller_id) % 70) + 1}`
-      : (seller: {
+  seller: {
   id: Number(p.seller_id),
 
   name:
