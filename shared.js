@@ -26,7 +26,6 @@ const SSToast = {
   }
 };
 
-
 // ===== API HELPER =====
 
 const API_BASE = "https://second-stories-production.up.railway.app";
@@ -55,7 +54,6 @@ async function apiJSON(url, options = {}) {
 
   return data;
 }
-
 
 // ===== AUTH =====
 
