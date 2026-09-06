@@ -607,6 +607,19 @@ function mapProduct(p) {
       p.seller_avatar.startsWith("data:image/")
     )
       ? `https://i.pravatar.cc/150?img=${(Number(p.seller_id) % 70) + 1}`
+      : (seller: {
+  id: Number(p.seller_id),
+
+  name:
+    p.seller_name ||
+    "",
+
+  avatar:
+    (
+      typeof p.seller_avatar === "string" &&
+      p.seller_avatar.startsWith("data:image/")
+    )
+      ? `https://i.pravatar.cc/150?img=${(Number(p.seller_id) % 70) + 1}`
       : (
           p.seller_avatar ||
           `https://i.pravatar.cc/150?img=${(Number(p.seller_id) % 70) + 1}`
@@ -618,7 +631,6 @@ function mapProduct(p) {
       0
     )
 },
-
     description:
       p.description ||
       "",
