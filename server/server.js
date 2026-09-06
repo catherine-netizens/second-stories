@@ -342,8 +342,9 @@ app.post("/api/conversations",requireAuth,async(req,res)=>{try{const {sellerId,p
   );
   if(r.length)return ok(res,{conversationId:r[0].id});const [n]=await pool.query("INSERT INTO conversations(buyer_id,seller_id,product_id) VALUES(?,?,?)",[req.session.userId,sellerId,productId||null]);return ok(res,{conversationId:n.insertId});}catch(e){console.error(e);return fail(res,500,"Gagal membuat percakapan.");}});
 app.post("/api/conversations/:id/messages",requireAuth,async(req,res)=>{try{const text=(req.body.message||"").trim();if(!text)return fail(res,400,"Pesan kosong.");const [c]=await pool.query("SELECT id FROM conversations WHERE id=? AND (buyer_id=? OR seller_id=?)",[req.params.id,req.session.userId,req.session.userId]);if(!c.length)return fail(res,403,"Akses percakapan ditolak.");const [r]=await pool.query("INSERT INTO messages(conversation_id,sender_id,message) VALUES(?,?,?)",[req.params.id,req.session.userId,text]);return ok(res,{message:{id:r.insertId,sender_id:req.session.userId,message:text}});}catch(e){console.error(e);return fail(res,500,"Gagal mengirim pesan.");}});
+
 // Serve frontend AFTER API routes.
-const FRONTEND_DIR = process.cwd();
+const FRONTEND_DIR = path.join(__dirname, "..");
 
 app.use(express.static(FRONTEND_DIR));
 
